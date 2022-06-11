@@ -1,4 +1,4 @@
-package kr.imcf.ott.entity;
+package kr.imcf.ott.domain.entity;
 
 
 import kr.imcf.ott.common.type.PlatformType;
