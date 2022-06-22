@@ -2,7 +2,7 @@ package kr.imcf.ott;
 
 import kr.imcf.ott.domain.TblAccount;
 import kr.imcf.ott.persistence.mapper.TblAccountMapper;
-import kr.imcf.ott.persistence.repository.TblAccountRepository;
+import kr.imcf.ott.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +15,12 @@ import java.util.List;
 @Slf4j
 public class TestController {
 
-    private final TblAccountRepository tblAccountRepository;
+    private final AccountRepository accountRepository;
     private final TblAccountMapper tblAccountMapper;
 
     @GetMapping("/test")
     public List<TblAccount> test1(){
-        tblAccountRepository.findAll();             // JPA Test
+        accountRepository.findAll();             // JPA Test
         return tblAccountMapper.selectAll();       // Mybatis Test
     }
 

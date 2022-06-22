@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 @SpringBootTest
 @Slf4j
 public class RedisRepositoryTest {
@@ -39,6 +41,12 @@ public class RedisRepositoryTest {
 
         // 삭제
         accountRedisRepository.delete(account);
+    }
+
+    @Test
+    void findOne(){
+        Optional<RAccount> byId = accountRedisRepository.findById((1L));
+        byId.ifPresent(rAccount -> log.info("Name : {} || AccessToken : {} || RefreshToken : {}", rAccount.getName(), rAccount.getAccessToken(), rAccount.getRefreshToken()));
     }
 
     RAccount createNew(){

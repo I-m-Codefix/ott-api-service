@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "RAccount", timeToLive = 30)
+@RedisHash(value = "RAccount", timeToLive = 1800)
 public class RAccount {
     @Id
     private Long id;

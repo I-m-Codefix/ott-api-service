@@ -2,7 +2,7 @@ package kr.imcf.ott.sample;
 
 import kr.imcf.ott.domain.TblAccount;
 import kr.imcf.ott.persistence.mapper.TblAccountMapper;
-import kr.imcf.ott.persistence.repository.TblAccountRepository;
+import kr.imcf.ott.persistence.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class AccountTest {
     private TblAccountMapper tblAccountMapper;
 
     @Autowired
-    private TblAccountRepository tblAccountRepository;
+    private AccountRepository accountRepository;
 
     @Test
     @Rollback(value = true)
@@ -34,7 +34,7 @@ public class AccountTest {
     @Rollback(value = true)
     public void jpaTest(){
         log.info("JPA 계정 조회 테스트");
-        List<Account> selectedAll = tblAccountRepository.findAll();
+        List<Account> selectedAll = accountRepository.findAll();
         log.info("현재 서비스 계정 개수 : {} ", selectedAll.size());
     }
 
