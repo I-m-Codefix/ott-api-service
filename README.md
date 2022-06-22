@@ -1,5 +1,5 @@
 # IMCF OTT API Service
-- Test Account : imcf / imcf
+- Test Account : imcf / imcf (현재 인증절차 비활성화 - 개발진행)
 - mybatis, jpa 동시 사용
 - application.yml, generatorConfig.xml - DB 정보 제거
 - redis 연동완료
