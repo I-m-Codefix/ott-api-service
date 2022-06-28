@@ -9,7 +9,7 @@ public enum OAuth2Provider {
     KAKAO {
         @Override
         public ClientRegistration.Builder getBuilder(String registrationId) {
-            ClientRegistration.Builder builder = getBuilder(registrationId,
+            ClientRegistration.Builder builder = this.getBuilder(registrationId,
                     ClientAuthenticationMethod.POST);
             builder.scope("profile,account_email");
             builder.authorizationUri("https://kauth.kakao.com/oauth/authorize");
@@ -23,7 +23,7 @@ public enum OAuth2Provider {
     NAVER {
         @Override
         public ClientRegistration.Builder getBuilder(String registrationId) {
-            ClientRegistration.Builder builder = getBuilder(registrationId,
+            ClientRegistration.Builder builder = this.getBuilder(registrationId,
                     ClientAuthenticationMethod.POST);
             builder.scope("profile");
             builder.authorizationUri("https://nid.naver.com/oauth2.0/authorize");
@@ -41,7 +41,7 @@ public enum OAuth2Provider {
         ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
         builder.clientAuthenticationMethod(method);
         builder.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE);
-        builder.redirectUriTemplate("https://icmf.kr/login/oauth2/code/{registrationId}");
+        builder.redirectUriTemplate("https://localhost:8080/login/oauth2/code/{registrationId}");
         //builder.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}");
         return builder;
     }

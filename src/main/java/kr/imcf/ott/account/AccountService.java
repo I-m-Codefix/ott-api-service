@@ -1,13 +1,26 @@
 package kr.imcf.ott.account;
 
+import kr.imcf.ott.common.type.PlatformType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @RequiredArgsConstructor
-public class AccountService {
+public class AccountService implements UserDetailsService {
+
+    public UserDetails loadUserByUsername(String s, PlatformType platformType) throws UsernameNotFoundException {
+        return null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
+    }
 
     @Transactional(readOnly = false)
     public boolean signup(){

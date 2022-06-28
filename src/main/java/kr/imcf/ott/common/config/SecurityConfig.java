@@ -1,9 +1,12 @@
 package kr.imcf.ott.common.config;
 
+import kr.imcf.ott.account.AccountService;
 import kr.imcf.ott.account.CustomOAuth2AuthorizedClientService;
+import kr.imcf.ott.account.OAuth2LoginSuccessHandler;
 import kr.imcf.ott.account.OAuth2Provider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import kr.imcf.ott.common.filter.LoggerFilter;
+import kr.imcf.ott.common.props.OAuth2Props;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -35,16 +38,16 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    AccountService accountService;
+    private final OAuth2Props oAuth2Props;
 
-    @Autowired
-    CustomOAuth2AuthorizedClientService customOAuth2AuthorizedClientService;
+    private final AccountService accountService;
 
-//    @Autowired
-//    OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final CustomOAuth2AuthorizedClientService customOAuth2AuthorizedClientService;
+
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public OAuth2AuthorizedClientService authorizedClientService() {
@@ -84,41 +87,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.addFilterBefore(new LoggerFilter(), WebAsyncManagerIntegrationFilter.class);
-//
-//        http.authorizeRequests()
-//                .mvcMatchers("/admin/**", "/manage/**").hasRole("ADMIN")
-//                .anyRequest().permitAll()
-//                .accessDecisionManager(accessDecisionManager())
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-//                .and()
-//                .oauth2Login()
-//                .successHandler(oAuth2LoginSuccessHandler);
-//
-//
-//        http.formLogin()
-//                .loginPage("/login")
-//                .usernameParameter("email")
-//                .passwordParameter("password")
-//                .loginProcessingUrl("/login")
+
+        http.authorizeRequests()
+                .mvcMatchers("/admin/**", "/manage/**").hasRole("ADMIN")
+                .anyRequest().permitAll()
+                .accessDecisionManager(accessDecisionManager())
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                .and()
+                .oauth2Login()
+                .successHandler(oAuth2LoginSuccessHandler);
+
+
+        http.formLogin()
+                .loginPage("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .loginProcessingUrl("/login")
 //                .successHandler(new LoginSuccessHandler())
 //                .failureHandler(new LoginFailHandler())
-//                .permitAll();
-//
-//        http.csrf().disable();
-//
-//        http.logout()
-//                .logoutUrl("/logout")
-//                .deleteCookies("JSESSIONID")
-//                .logoutSuccessUrl("/index");
+                .permitAll();
+
+        http.csrf().disable();
+
+        http.logout()
+                .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/index");
 
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(accountService);
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(accountService);
+    }
 
     // method security에서 authenticationManager를 bean으로 접근 가능하도록
     @Bean
@@ -131,34 +134,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         Oauth2 로그인
         현재 카카오 로그인까지만 개발완료
      */
-//    @Bean
-//    public ClientRegistrationRepository clientRegistrationRepository(
-//            @Value("${spring.security.oauth2.kakao.client-id}") String kakaoClientId,
-//            @Value("${spring.security.oauth2.kakao.client-secret}") String kakaoClientSecret,
-//            @Value("${spring.security.oauth2.naver.client-id}") String naverClientId,
-//            @Value("${spring.security.oauth2.naver.client-secret}") String naverClientSecret) {
-//
-//        List<ClientRegistration> registrations =
-//                oAuth2ClientProperties.getRegistration().keySet().stream()
-//                        .map(client -> getRegistration(oAuth2ClientProperties, client))
-//                        .filter(Objects::nonNull)
-//                        .collect(Collectors.toList());
-//
-//        registrations.add(OAuth2Provider.KAKAO.getBuilder("kakao")
-//                .clientId(kakaoClientId)
-//                .clientSecret(kakaoClientSecret)
-//                .jwkSetUri("temp")
-//                .build());
-//
-//        registrations.add(OAuth2Provider.NAVER.getBuilder("naver")
-//                .clientId(naverClientId)
-//                .clientSecret(naverClientSecret)
-//                .jwkSetUri("temp")
-//                .build());
-//
-//        return new InMemoryClientRegistrationRepository(registrations);
-//
-//    }
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+
+        List<ClientRegistration> registrations =
+                oAuth2ClientProperties.getRegistration().keySet().stream()
+                        .map(client -> getRegistration(oAuth2ClientProperties, client))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+
+        registrations.add(OAuth2Provider.KAKAO.getBuilder("kakao")
+                .clientId(oAuth2Props.kakaoClientId)
+                .clientSecret(oAuth2Props.kakaoClientSecret)
+                .jwkSetUri("temp")
+                .build());
+
+        registrations.add(OAuth2Provider.NAVER.getBuilder("facebook")
+                .clientId(oAuth2Props.facebookClientId)
+                .clientSecret(oAuth2Props.facebookClientSecret)
+                .jwkSetUri("temp")
+                .build());
+
+        return new InMemoryClientRegistrationRepository(registrations);
+
+    }
 
     private ClientRegistration getRegistration(OAuth2ClientProperties clientProperties, String client) {
         if ("google".equals(client)) {
