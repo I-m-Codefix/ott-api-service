@@ -1,4 +1,4 @@
-package kr.imcf.ott.account;
+package kr.imcf.ott.account.oauth2;
 
 import kr.imcf.ott.common.Message;
 import org.springframework.stereotype.Controller;

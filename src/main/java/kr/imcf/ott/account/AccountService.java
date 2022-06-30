@@ -11,16 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService {
-
-    public UserDetails loadUserByUsername(String s, PlatformType platformType) throws UsernameNotFoundException {
-        return null;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
-    }
+public class AccountService {
 
     @Transactional(readOnly = false)
     public boolean signup(){
