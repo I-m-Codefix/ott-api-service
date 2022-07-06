@@ -1,5 +1,7 @@
 package kr.imcf.ott.account;
 
+import kr.imcf.ott.domain.entity.Account;
+import kr.imcf.ott.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,10 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AccountService {
 
+    private final AccountRepository accountRepository;
+
     @Transactional(readOnly = false)
-    public boolean signup(){
+    public boolean signup(SignupRequest request){
         // 회원가입에 대한 프로세스
-        return false;
+        Account account = new Account();
+        if(accountRepository.existsByEmail(request.getEmail()))
+            return false;
+        account.setName(request.getName());
+        account.setPassword(request.getPassword());
+        account.setEmail(request.getEmail());
+        account.setPlatformType(request.getPlatformType());
+        account.setProfileImage(request.getPlatformImage());
+        accountRepository.save(account);
+
+        return true;
     }
 
     @Transactional(readOnly = false)
