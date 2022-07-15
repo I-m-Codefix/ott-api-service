@@ -1,5 +1,6 @@
 package kr.imcf.ott.account;
 
+import kr.imcf.ott.common.type.PlatformType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,6 @@ public class SignupRequest {
     private String name;
     private String password;
     private String email;
-    private String platformType;
+    private PlatformType platformType;
     private String platformImage;       // ImageFile encoded base64
 }

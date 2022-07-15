@@ -4,9 +4,9 @@
 
 	<context id="context1" targetRuntime="MyBatis3simple">
 		<jdbcConnection
-				connectionURL="jdbc:mysql://{IP}{PORT}/{DB_NAME}"
+				connectionURL="jdbc:mysql://${DB_IP}:${DB_PORT}/${DB_NAME}"
 				driverClass="org.mariadb.jdbc.Driver"
-				password="" userId="" />
+				password="${DB_PASSWORD}" userId="${DB_USERNAME}" />
 
 		<javaModelGenerator
 				targetPackage="kr.imcf.ott.domain"
