@@ -2,15 +2,18 @@ package kr.imcf.ott.domain.entity;
 
 
 import kr.imcf.ott.common.type.PlatformType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "TBL_ACCOUNT")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Account extends TimeEntity {
 
     @Id
@@ -42,6 +45,9 @@ public class Account extends TimeEntity {
 
     @Column(name = "refreshToken", nullable = true)
     private String refreshToken;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private Set<Mail> mails;
 
     // 패스워드 암호화 기법
     public void encodePassword(PasswordEncoder passwordEncoder) {

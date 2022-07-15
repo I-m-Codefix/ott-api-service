@@ -17,7 +17,7 @@ public class AccountController {
         // 원래라면 HTTP Header에 존재하는 토큰을 사용해서, 사용자 구분이 가능
         // 현재 토큰 인증 정보 미개발로 인해서, 사용자의 이메일이나 ID를 임의로 넣어서 추출
 
-        //임시 email로 해당 email를 가진 사용자 조회
+        //임시 email로 해당 email을 가진 사용자 조회
         String tempEmail = "rojae@kakao.com";
 
         MyInfoResponse showMessage = accountService.showMyInfo(tempEmail);
@@ -33,7 +33,7 @@ public class AccountController {
         if(accountService.editMyInfo(request))
             return new ResponseEntity<>(Message.builder().code(200).response("수정되었습니다.").build(), HttpStatus.OK);
         else
-            return new ResponseEntity<>(Message.builder().code(500).response("수정되지않았습니다.").build(), HttpStatus.OK);
+            return new ResponseEntity<>(Message.builder().code(500).response("수정되지 않았습니다.").build(), HttpStatus.OK);
 
     }
 }
