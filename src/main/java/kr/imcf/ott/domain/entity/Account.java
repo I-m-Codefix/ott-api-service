@@ -12,7 +12,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class Account extends TimeEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -26,7 +28,7 @@ public class Account extends TimeEntity {
     private String email;
 
     @Column(name = "isAuth", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'", length = 1)
-    private char isAuth;
+    private char isAuth = 'N';
 
     @Column(name = "platformType", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'IMCF' ")
     @Enumerated(EnumType.STRING)

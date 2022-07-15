@@ -16,10 +16,11 @@ public class SignupController {
     @PostMapping("/account/signup")
     public ResponseEntity<Message> signup(@RequestBody SignupRequest request){
         // 회원가입 프로세스
-        accountService.signup();
+        if(accountService.signup(request))
+            return new ResponseEntity<>(Message.builder().code(200).response("회원 가입이 완료되었습니다").build(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(Message.builder().code(500).response("회원 가입이 실패하였습니다").build(), HttpStatus.OK);
 
-        Message message = Message.builder().code(200).response("회원 가입이 완료되었습니다").build();
-        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PostMapping("/account/signup/mail")
