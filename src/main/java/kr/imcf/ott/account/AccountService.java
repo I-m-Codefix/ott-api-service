@@ -1,5 +1,9 @@
 package kr.imcf.ott.account;
 
+import kr.imcf.ott.common.type.PlatformType;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import kr.imcf.ott.domain.entity.Account;
 import kr.imcf.ott.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +16,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequiredArgsConstructor
 public class AccountService {
 
-    //JPA repository 사용
     private final AccountRepository accountRepository;
 
     @Transactional(readOnly = false)
-    public boolean signup(){
+    public boolean signup(SignupRequest request){
         // 회원가입에 대한 프로세스
-        return false;
+        Account account = new Account();
+        if(accountRepository.existsByEmail(request.getEmail()))
+            return false;
+        account.setName(request.getName());
+        account.setPassword(request.getPassword());
+        account.setEmail(request.getEmail());
+        account.setPlatformType(request.getPlatformType());
+        account.setProfileImage(request.getPlatformImage());
+        accountRepository.save(account);
+
+        return true;
     }
 
     @Transactional(readOnly = false)

@@ -47,3 +47,4 @@ mvnw.cmd
 
 src/main/resources/application.yml
 src/main/resources/generatorConfig.xml
+src/main/resources/application-oauth.properties
