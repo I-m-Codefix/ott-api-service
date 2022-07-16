@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
+//    @Value("${jwt.secret-key}")
+//    private String secretKey;
 
     public String generateRefreshToken(CustomOAuth2User customOAuth2User) {
         /* ... */

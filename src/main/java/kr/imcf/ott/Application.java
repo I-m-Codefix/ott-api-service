@@ -14,20 +14,13 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication
 @EnableJpaAuditing
 @PropertySource({
-        "classpath:application-oauth.properties",
+//        "classpath:application-oauth.properties",
         "classpath:smtp.properties"
 })
 public class Application {
-
-    @Value("${imcf.image.upload.path}")
-    private String uploadPath;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean(name = "uploadPath")
-    public String uploadPath() {
-        return uploadPath;
-    }
 }
