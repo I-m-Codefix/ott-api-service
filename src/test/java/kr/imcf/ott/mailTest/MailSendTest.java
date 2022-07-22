@@ -1,9 +1,10 @@
-package kr.imcf.ott.mail;
+package kr.imcf.ott.mailTest;
 
 import kr.imcf.ott.common.type.MailType;
 import kr.imcf.ott.common.type.PlatformType;
 import kr.imcf.ott.domain.entity.Account;
 import kr.imcf.ott.domain.entity.Mail;
+import kr.imcf.ott.mail.MailService;
 import kr.imcf.ott.persistence.repository.AccountRepository;
 import kr.imcf.ott.persistence.repository.MailRepository;
 import org.junit.Before;
@@ -18,11 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Rollback(value = false)
+@Rollback(value = true)
 public class MailSendTest {
 
     @Autowired
@@ -34,7 +36,7 @@ public class MailSendTest {
     @Autowired
     private MailRepository mailRepository;
 
-    private final String testUserEmail = "test@gmail.com";
+    private final String testUserEmail = "kimdongwoo1219@naver.com";
 
     @Before
     @Transactional(readOnly = false)
@@ -62,11 +64,10 @@ public class MailSendTest {
                 .email(testUserEmail)
                 .account(selectedAccount)
                 .expireDate(LocalDateTime.now().plusMinutes(10))
-                .secretKey("SECRETKEY")
+                .secretKey(UUID.randomUUID().toString())
                 .build();
 
         mailRepository.save(newMail);
-
         mailService.signupSend(newMail);
     }
 
