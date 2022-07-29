@@ -20,7 +20,7 @@ public class Category extends TimeEntity{
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "category_name", nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
     private String category_name;
 
     @Column(name = "use_yn", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'", length = 1)
