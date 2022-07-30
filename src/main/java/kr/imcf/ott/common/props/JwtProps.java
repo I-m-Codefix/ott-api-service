@@ -20,9 +20,9 @@ public class JwtProps {
     @Value("${oauth2.jwt.expire-duration-hour}")
     public long jwtExpireDurationHour;
 
-    @Value("${oauth2.jwt.crypt.algorithm}")
-    public String jwtCryptAlgorithm;
-
-    @Value("${oauth2.jwt.crypt.algorithm}")
+    @Value("${oauth2.jwt.crypt.secret-key}")
     public String jwtCryptSecretKey;
+
+    @Value("${oauth2.jwt.crypt.iv}")
+    public String jwtCryptIv;
 }

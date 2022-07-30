@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import kr.imcf.ott.account.oauth2.OAuth2Principal;
+import kr.imcf.ott.common.crypt.AESCrypt;
 import kr.imcf.ott.common.props.JwtProps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,29 +27,32 @@ public class JwtProvider {
         return SignatureAlgorithm.HS256;
     }
 
-    public Map<String, Object> claims(OAuth2Principal principal) {
-        Map<String, Object> dataClamins = new HashMap<>();
+    public String dataClaims(OAuth2Principal principal) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        AESCrypt aesCrypt = new AESCrypt(jwtProps.jwtCryptSecretKey, jwtProps.jwtCryptIv);
+        String data = mapper.writeValueAsString(principal);
 
-        Map<String, Object> data = mapper.convertValue(principal, new TypeReference<Map<String, Object>>() {});
-        dataClamins.put(jwtProps.jwtDataClaims, data);
-        return dataClamins;
+        return aesCrypt.encrypt(data);
     }
 
     public String generateToken(OAuth2Principal principal) {
         Date now = new Date();
-        System.out.println(new Date(now.getTime() + Duration.ofHours(jwtProps.jwtExpireDurationHour).toMillis()));
-        System.out.println(Arrays.toString(DatatypeConverter.parseBase64Binary(jwtProps.jwtSecretKey)));
 
-        return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setClaims(this.claims(principal))          // NOTICE : claims 먼저 셋팅해야함 (그렇지 않을 시, 나머지 데이터 미셋팅 문제 발생)
-                .setIssuer(jwtProps.jwtIssuer)
-                .setIssuedAt(now)
-                .setSubject(jwtProps.jwtSubject)
-                .setExpiration(new Date(now.getTime() + Duration.ofHours(jwtProps.jwtExpireDurationHour).toMillis()))
-                .signWith(this.algorithm(), DatatypeConverter.parseBase64Binary(jwtProps.jwtSecretKey))
-                .compact();
+        try {
+            return Jwts.builder()
+                    .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                    .claim(jwtProps.jwtDataClaims, this.dataClaims(principal))          // NOTICE : claims 먼저 셋팅해야함 (그렇지 않을 시, 나머지 데이터 미셋팅 문제 발생)
+                    .setIssuer(jwtProps.jwtIssuer)
+                    .setIssuedAt(now)
+                    .setSubject(jwtProps.jwtSubject)
+                    .setExpiration(new Date(now.getTime() + Duration.ofHours(jwtProps.jwtExpireDurationHour).toMillis()))
+                    .signWith(this.algorithm(), DatatypeConverter.parseBase64Binary(jwtProps.jwtSecretKey))
+                    .compact();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public String getSubject(String token) {
