@@ -1,7 +1,6 @@
 package kr.imcf.ott.account.oauth2;
 
 import kr.imcf.ott.account.oauth2.kakao.KakaoService;
-import kr.imcf.ott.account.oauth2.kakao.KakaoTokenWrapper;
 import kr.imcf.ott.common.props.OAuth2Props;
 import kr.imcf.ott.common.type.PlatformType;
 import kr.imcf.ott.common.util.TimeUtils;
@@ -33,9 +32,9 @@ public class OAuth2Controller {
     }
 
     @GetMapping("/login/oauth2/kakao")
-    public ResponseEntity<KakaoTokenWrapper> kakaoLogin(@RequestParam String code){
-        ResponseEntity<KakaoTokenWrapper> response = kakaoService.getKakaoToken(code);
-        return response;
+    public ResponseEntity<OAuth2LoginResponse> kakaoLogin(@RequestParam String code){
+        OAuth2LoginResponse response = kakaoService.kakaoLogin(code);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
