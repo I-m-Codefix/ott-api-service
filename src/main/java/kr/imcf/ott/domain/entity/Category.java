@@ -5,7 +5,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "TBL_CATEGORY")
 @Getter
@@ -29,4 +31,6 @@ public class Category extends TimeEntity{
     @Column(name = "parent_id", nullable = false)
     private long parent_id;
 
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    private Set<Streaming> streamings = new HashSet<Streaming>();
 }
