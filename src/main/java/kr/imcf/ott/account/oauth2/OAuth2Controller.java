@@ -1,16 +1,12 @@
 package kr.imcf.ott.account.oauth2;
 
 import kr.imcf.ott.account.oauth2.kakao.KakaoService;
-import kr.imcf.ott.account.oauth2.kakao.KakaoTokenResponse;
-import kr.imcf.ott.common.http.HttpHeader;
-import kr.imcf.ott.common.http.RestProvider;
+import kr.imcf.ott.account.oauth2.kakao.KakaoTokenWrapper;
 import kr.imcf.ott.common.props.OAuth2Props;
 import kr.imcf.ott.common.type.PlatformType;
 import kr.imcf.ott.common.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +33,8 @@ public class OAuth2Controller {
     }
 
     @GetMapping("/login/oauth2/kakao")
-    public ResponseEntity<KakaoTokenResponse> kakaoLogin(@RequestParam String code){
-        ResponseEntity<KakaoTokenResponse> response = kakaoService.getKakaoToken(code);
+    public ResponseEntity<KakaoTokenWrapper> kakaoLogin(@RequestParam String code){
+        ResponseEntity<KakaoTokenWrapper> response = kakaoService.getKakaoToken(code);
         return response;
     }
 

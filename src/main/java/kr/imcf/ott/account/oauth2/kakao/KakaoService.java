@@ -19,7 +19,7 @@ public class KakaoService {
     private final RestProvider restProvider;
     private final OAuth2Props oAuth2Props;
 
-    public ResponseEntity<KakaoTokenResponse> getKakaoToken(String code){
+    public ResponseEntity<KakaoTokenWrapper> getKakaoToken(String code){
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList(oAuth2Props.kakaoClientId));
         params.put("client_secret", Collections.singletonList(oAuth2Props.kakaoClientSecret));
@@ -28,6 +28,6 @@ public class KakaoService {
         params.put("code", Collections.singletonList(code));
 
         return restProvider.send(HttpMethod.POST, oAuth2Props.kakaoTokenUri, params
-                , new HttpHeader(MediaType.APPLICATION_FORM_URLENCODED), KakaoTokenResponse.class);
+                , new HttpHeader(MediaType.APPLICATION_FORM_URLENCODED), KakaoTokenWrapper.class);
     }
 }
