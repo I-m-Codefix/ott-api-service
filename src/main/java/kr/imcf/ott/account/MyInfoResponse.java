@@ -1,6 +1,7 @@
 package kr.imcf.ott.account;
 
 import kr.imcf.ott.common.Message;
+import kr.imcf.ott.common.type.PlatformType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

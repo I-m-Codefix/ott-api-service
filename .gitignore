@@ -44,3 +44,7 @@ secrets.yml
 mvnw
 mvnw.cmd
 .mvn/
+
+src/main/resources/application.yml
+src/main/resources/generatorConfig.xml
+src/main/resources/application-oauth.properties
