@@ -48,7 +48,7 @@ public class RestProvider {
             if (client.getParams() != null) client.getParams().forEach(uriBuilder::queryParam);
             return restTemplate.getForEntity(uriBuilder.toUriString(), responseClassType);
         } else if (client.getMethod().equals(HttpMethod.POST)) {
-            return restTemplate.postForEntity(client.getUrl(), client.getParams(), responseClassType);
+            return restTemplate.exchange(client.getUrl(), HttpMethod.POST, client.toEntity(), responseClassType);
         } else if (client.getMethod().equals(HttpMethod.PUT)) {
             return restTemplate.exchange(client.getUrl(), HttpMethod.PUT, client.toEntity(), responseClassType);
         } else if (client.getMethod().equals(HttpMethod.PATCH)) {
