@@ -26,8 +26,8 @@ public class OAuth2Controller {
                 .clientId(oAuth2Props.kakaoClientId)
                 .redirectUri(oAuth2Props.kakaoRedirectUri)
                 .platformType(PlatformType.KAKAO)
-                .uri(String.format("%s?client_id=%s&redirect_uri=%s",
-                        oAuth2Props.kakaoAuthUri,oAuth2Props.kakaoClientId, oAuth2Props.kakaoRedirectUri))
+                .uri(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
+                        oAuth2Props.kakaoAuthUri,oAuth2Props.kakaoClientId, oAuth2Props.kakaoRedirectUri, "code"))
                 .reqTime(TimeUtils.now()).build();
 
         return new ResponseEntity<OAuth2ClientInfoWrapper>(kakaoClientInfoWrapper, HttpStatus.OK);
