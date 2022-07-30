@@ -13,4 +13,13 @@ public class OAuth2LoginResponse {
     private String profileImage;
     private String token;
     private String expireTime;
+
+    public OAuth2Principal toPrincipal() {
+        return OAuth2Principal.builder()
+                .name(this.name)
+                .platformType(this.platformType)
+                .email(this.email)
+                .profileImage(this.profileImage)
+                .build();
+    }
 }

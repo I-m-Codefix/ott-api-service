@@ -1,10 +1,14 @@
 package kr.imcf.ott.account.oauth2.kakao;
 
+import com.nimbusds.jwt.util.DateUtils;
 import kr.imcf.ott.account.oauth2.OAuth2LoginResponse;
+import kr.imcf.ott.account.oauth2.OAuth2Principal;
 import kr.imcf.ott.common.http.HttpHeader;
 import kr.imcf.ott.common.http.RestProvider;
+import kr.imcf.ott.common.jwt.JwtProvider;
 import kr.imcf.ott.common.props.OAuth2Props;
 import kr.imcf.ott.common.type.PlatformType;
+import kr.imcf.ott.common.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -21,7 +26,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class KakaoService {
+
     private final RestProvider restProvider;
+    private final JwtProvider jwtProvider;
     private final OAuth2Props oAuth2Props;
 
     public OAuth2LoginResponse kakaoLogin(String code) {
@@ -36,8 +43,28 @@ public class KakaoService {
                 this.getKakaoUserInfo(Objects.requireNonNull(tokenResponse.getBody()).getAccess_token());
         log.info("STEP 2 : KAKAO USER INFO => {}", userInfoResponse.getBody());
 
-        // STEP 3 : JWT SERVICE TOKEN
-        String jwtToken = "JWT_TOKEN";      // TO DO : Implement to JWT AccessToken including User's Info
+        // STEP 3 : Generate JWT Token including User's Info
+
+        // Create User's Principal Data (토큰에 저장될 데이터)
+        OAuth2Principal oAuth2Principal = OAuth2Principal.builder()
+                .name(Objects.requireNonNull(userInfoResponse.getBody()).kakao_account.profile.nickname)
+                .email(userInfoResponse.getBody().kakao_account.email)
+                .platformType(PlatformType.KAKAO)
+                .profileImage(userInfoResponse.getBody().kakao_account.profile.profile_image_url)       // 640 X 640
+                .build();
+
+        // Generate JWT Token
+        String jwtToken = jwtProvider.generateToken(oAuth2Principal);           // TO DO : AES 256 Crypt
+
+        // Generated JWT Token Verification
+        try {
+            jwtProvider.verify(jwtToken);
+        } catch (Exception e) {
+            log.error("발급할 토큰에 검증에 실패했습니다.");
+            e.printStackTrace();
+        }
+
+        log.info("JWT Token :: {}", jwtToken);
 
         OAuth2LoginResponse oAuth2LoginResponse = OAuth2LoginResponse.builder()
                 .name(Objects.requireNonNull(userInfoResponse.getBody()).kakao_account.profile.nickname)
@@ -45,7 +72,7 @@ public class KakaoService {
                 .platformType(PlatformType.KAKAO)
                 .profileImage(userInfoResponse.getBody().kakao_account.profile.profile_image_url)       // 640 X 640
                 .token(jwtToken)
-                .expireTime("EXPIRE_DATE")
+                .expireTime(TimeUtils.dateFomat(jwtProvider.getExpiration(jwtToken), "yyyy.MM.dd HH:mm:ss"))
                 .build();
 
         log.info("END KAKAO LOGIN :: CODE => {}", code);
