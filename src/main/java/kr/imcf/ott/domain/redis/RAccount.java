@@ -1,35 +1,39 @@
 package kr.imcf.ott.domain.redis;
 
 
+import kr.imcf.ott.common.props.JwtProps;
 import kr.imcf.ott.common.type.PlatformType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.annotation.Id;
+import java.io.Serializable;
 
-import javax.persistence.*;
-
+@EqualsAndHashCode
+@Builder
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@RedisHash(value = "RAccount", timeToLive = 1800)
-public class RAccount {
+@AllArgsConstructor
+@RedisHash(value = "RAccount")
+public class RAccount implements Serializable {
+
     @Id
-    private Long id;
+    private String id;
 
     private String name;
-
-    private String email;
-
-    private char isAuth;
-
-    private PlatformType platformType;
 
     private String profileImage;
 
     private String accessToken;
 
-    private String refreshToken;
+    public static String idFormat(PlatformType platformType, String email) {
+        return String.format("%s:%s",platformType.name(),email);
+    }
+
+    @TimeToLive
+    public long getTimeToLive() {
+        return JwtProps.jwtExpireDurationHour * 3600;
+    }
+
+
 }

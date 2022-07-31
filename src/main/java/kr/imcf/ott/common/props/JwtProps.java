@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtProps {
+
+
     @Value("${oauth2.jwt.issuer}")
     public String jwtIssuer;
 
@@ -17,8 +19,13 @@ public class JwtProps {
     @Value("${oauth2.jwt.secret-key}")
     public String jwtSecretKey;
 
+    // jwtExpireDurationHour :: Redis에서 TimeToLive 셋팅을 위해서 static 선언
+    public static long jwtExpireDurationHour;
+
     @Value("${oauth2.jwt.expire-duration-hour}")
-    public long jwtExpireDurationHour;
+    public void setJwtExpireDurationHour(long value){
+        jwtExpireDurationHour = value;
+    }
 
     @Value("${oauth2.jwt.crypt.secret-key}")
     public String jwtCryptSecretKey;

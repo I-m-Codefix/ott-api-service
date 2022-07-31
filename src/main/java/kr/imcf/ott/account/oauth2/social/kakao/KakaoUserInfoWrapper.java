@@ -1,4 +1,4 @@
-package kr.imcf.ott.account.oauth2.kakao;
+package kr.imcf.ott.account.oauth2.social.kakao;
 
 import lombok.*;
 import java.util.Date;
