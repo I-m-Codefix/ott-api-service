@@ -23,7 +23,7 @@ public class Account extends TimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
     private String name;
 
     @Column(name = "password", nullable = false)
