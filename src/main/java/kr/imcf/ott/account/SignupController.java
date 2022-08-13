@@ -16,7 +16,9 @@ public class SignupController {
     @PostMapping("/account/signup")
     public ResponseEntity<Message> signup(@RequestBody SignupRequest request){
         // 회원가입 프로세스
-        if(accountService.signup(request))
+        if(accountService.isDuplicate(request))
+            return new ResponseEntity<>(Message.builder().code(200).response("이미 가입된 이메일입니다").build(), HttpStatus.OK);
+        else if(accountService.signup(request))
             return new ResponseEntity<>(Message.builder().code(200).response("인증메일을 확인해주세요.").build(), HttpStatus.OK);
         else
             return new ResponseEntity<>(Message.builder().code(500).response("회원 가입이 실패하였습니다").build(), HttpStatus.OK);

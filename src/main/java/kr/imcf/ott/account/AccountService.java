@@ -103,4 +103,7 @@ public class AccountService {
         return false;
     }
 
+    public boolean isDuplicate(SignupRequest request) {
+        return accountRepository.existsByEmail(request.getEmail());
+    }
 }
