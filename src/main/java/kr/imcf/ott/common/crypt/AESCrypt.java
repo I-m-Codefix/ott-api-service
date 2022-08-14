@@ -50,9 +50,9 @@ public class AESCrypt {
 		return Base64.getEncoder().encodeToString(encrypted);
 	}
 
-	public String decrypt(String encryptData, String aesKey) throws Exception {
+	public String decrypt(String encryptData) throws Exception {
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		SecretKeySpec keySpec = new SecretKeySpec(aesKey.getBytes(), "AES");
+		SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");
 		IvParameterSpec ivParamSpec = new IvParameterSpec(this.getIv().getBytes());
 
 		cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);

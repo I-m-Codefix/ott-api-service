@@ -29,7 +29,7 @@ public class AESCryptTest {
     @Test
     public void aesDecrypt() throws Exception {
         AESCrypt aesCrypt = new AESCrypt(jwtProps.jwtCryptSecretKey, jwtProps.jwtCryptIv);
-        String decryptData = aesCrypt.decrypt(encryptData, jwtProps.jwtCryptSecretKey);
+        String decryptData = aesCrypt.decrypt(encryptData);
         System.out.println(decryptData);
     }
 

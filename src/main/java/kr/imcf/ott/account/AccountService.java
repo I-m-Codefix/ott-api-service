@@ -7,14 +7,13 @@ import kr.imcf.ott.mail.MailService;
 import kr.imcf.ott.persistence.repository.AccountRepository;
 import kr.imcf.ott.persistence.repository.MailRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final MailRepository mailRepository;
     private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = false)
     public boolean signup(SignupRequest request){
@@ -34,7 +34,7 @@ public class AccountService {
             return false;
 
         account.setName(request.getName());
-        account.setPassword(request.getPassword());
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
         account.setEmail(request.getEmail());
         account.setPlatformType(request.getPlatformType());
         account.setProfileImage(request.getPlatformImage());
@@ -68,10 +68,22 @@ public class AccountService {
         return true;
     }
 
-    @Transactional(readOnly = true)
-    public boolean validCheckForSignup(){
-        // Mail 유효성 체크 (비밀키, 계정 1대1)
-        return false;
+    public boolean alreadyValidCheckMail(SignupValidRequest request){
+        return mailRepository.existsBySecretKeyAndEmailAndIsAuth(request.getSecretKey(), request.getEmail(), 'Y');
+    }
+
+    @Transactional(readOnly = false)
+    public boolean validCheckForSignup(SignupValidRequest request){
+        Optional<Mail> selectedMail = mailRepository.findBySecretKeyAndEmail(request.getSecretKey(), request.getEmail());
+        if(selectedMail.isEmpty()){
+            return false;
+        }
+        else{
+            Account selectedAccount = accountRepository.findByEmail(request.getEmail());
+            selectedMail.get().setIsAuth('Y');
+            selectedAccount.setIsAuth('Y');
+            return true;
+        }
     }
 
     @Transactional(readOnly = true)

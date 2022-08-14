@@ -40,10 +40,18 @@ public class SignupController {
     @PutMapping("/account/signup/mail")
     public ResponseEntity<Message> signupValidCheck(@RequestBody SignupValidRequest request){
         // 회원가입 메일 인증 절차
-        accountService.validCheckForSignup();
-
-        Message message = Message.builder().code(200).response("메일 인증이 완료되었습니다").build();
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        if(accountService.alreadyValidCheckMail(request)){
+            Message message = Message.builder().code(200).response("이미 인증된 메일입니다.").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        else if(accountService.validCheckForSignup(request)) {
+            Message message = Message.builder().code(200).response("메일 인증이 완료되었습니다.").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        else{
+            Message message = Message.builder().code(500).response("잘못된 요청입니다").build();
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
     }
 
 }

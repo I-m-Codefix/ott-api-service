@@ -1,8 +1,8 @@
-package kr.imcf.ott.account.oauth2.social.kakao;
+package kr.imcf.ott.account.oauth2.login.social.kakao;
 
 import kr.imcf.ott.account.oauth2.OAuth2LoginResponse;
 import kr.imcf.ott.account.oauth2.OAuth2Principal;
-import kr.imcf.ott.account.oauth2.social.SocialLoginServiceImpl;
+import kr.imcf.ott.account.oauth2.login.social.SocialLoginServiceImpl;
 import kr.imcf.ott.common.http.HttpHeader;
 import kr.imcf.ott.common.http.RestProvider;
 import kr.imcf.ott.common.jwt.JwtProvider;
@@ -11,7 +11,6 @@ import kr.imcf.ott.common.type.PlatformType;
 import kr.imcf.ott.common.util.TimeUtils;
 import kr.imcf.ott.persistence.repository.AccountRedisRepository;
 import kr.imcf.ott.persistence.repository.AccountRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -39,12 +38,12 @@ public class KakaoService extends SocialLoginServiceImpl {
     }
 
     public OAuth2Principal principal(KakaoUserInfoWrapper userInfoResponse){
-     return OAuth2Principal.builder()
-             .name(userInfoResponse.kakao_account.profile.nickname)
-            .email(userInfoResponse.kakao_account.email)
-            .platformType(PlatformType.KAKAO)
-            .profileImage(userInfoResponse.kakao_account.profile.profile_image_url)       // 640 X 640
-            .build();
+        OAuth2Principal oAuth2Principal = new OAuth2Principal();
+        oAuth2Principal.setName(userInfoResponse.kakao_account.profile.nickname);
+        oAuth2Principal.setEmail(userInfoResponse.kakao_account.email);
+        oAuth2Principal.setPlatformType(PlatformType.KAKAO);
+        oAuth2Principal.setProfileImage(userInfoResponse.kakao_account.profile.profile_image_url);  // 640 X 640
+        return oAuth2Principal;
     }
 
     public OAuth2LoginResponse response(KakaoUserInfoWrapper userInfoResponse, String token){

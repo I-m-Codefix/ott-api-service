@@ -2,6 +2,7 @@ package kr.imcf.ott.common.jwt;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.jsonwebtoken.*;
 import kr.imcf.ott.account.oauth2.OAuth2Principal;
 import kr.imcf.ott.common.crypt.AESCrypt;
@@ -29,10 +30,19 @@ public class JwtProvider {
 
     public String dataClaims(OAuth2Principal principal) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
         AESCrypt aesCrypt = new AESCrypt(jwtProps.jwtCryptSecretKey, jwtProps.jwtCryptIv);
         String data = mapper.writeValueAsString(principal);
 
         return aesCrypt.encrypt(data);
+    }
+
+    public OAuth2Principal dataClaims(String dataClaims) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
+        AESCrypt aesCrypt = new AESCrypt(jwtProps.jwtCryptSecretKey, jwtProps.jwtCryptIv);
+        String data = aesCrypt.decrypt(dataClaims);
+        return mapper.readValue(data, OAuth2Principal.class);
     }
 
     public String generateToken(OAuth2Principal principal) {
@@ -92,5 +102,24 @@ public class JwtProvider {
             e.printStackTrace();
         }
         return claimMap != null;
+    }
+
+    public OAuth2Principal toPrincipal(String token) throws Exception {
+        Map<String, Object> claimMap = null;
+        try {
+            claimMap = Jwts.parser()
+                    .setSigningKey(jwtProps.jwtSecretKey)
+                    .parseClaimsJws(token) // Parsing, Verify
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            // token Expired
+            e.getCause();
+            e.printStackTrace();
+        }
+
+        assert claimMap != null;
+
+        return this.dataClaims(claimMap.get(jwtProps.jwtDataClaims).toString());
+
     }
 }

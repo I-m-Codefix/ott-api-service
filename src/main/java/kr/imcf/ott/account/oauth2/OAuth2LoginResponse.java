@@ -15,11 +15,11 @@ public class OAuth2LoginResponse {
     private String expireTime;
 
     public OAuth2Principal toPrincipal() {
-        return OAuth2Principal.builder()
-                .name(this.name)
-                .platformType(this.platformType)
-                .email(this.email)
-                .profileImage(this.profileImage)
-                .build();
+        OAuth2Principal oAuth2Principal = new OAuth2Principal();
+        oAuth2Principal.setName(this.name);
+        oAuth2Principal.setEmail(this.email);
+        oAuth2Principal.setPlatformType(this.platformType);
+        oAuth2Principal.setProfileImage(this.profileImage);
+        return oAuth2Principal;
     }
 }

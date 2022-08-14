@@ -1,4 +1,4 @@
-package kr.imcf.ott.account.oauth2.social;
+package kr.imcf.ott.account.oauth2.login.social;
 
 import kr.imcf.ott.account.oauth2.OAuth2LoginResponse;
 import kr.imcf.ott.account.oauth2.OAuth2Principal;
@@ -93,7 +93,6 @@ public class SocialLoginServiceImpl implements SocialLoginService{
     @Override
     @Transactional(readOnly = false)
     public boolean saveRedis(OAuth2Principal oAuth2Principal, String token) {
-        System.out.println(oAuth2Principal.getEmail());
         // 기저장된 Redis 정보는 만료처리
         Optional<RAccount> beforeTokenInfo = accountRedisRepository.findById(RAccount.idFormat(oAuth2Principal.getPlatformType(), oAuth2Principal.getEmail()));
 

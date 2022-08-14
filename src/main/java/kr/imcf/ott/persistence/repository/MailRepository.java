@@ -3,7 +3,12 @@ package kr.imcf.ott.persistence.repository;
 import kr.imcf.ott.domain.entity.Mail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface MailRepository extends JpaRepository<Mail, Long> {
+
+    Optional<Mail> findBySecretKeyAndEmail(String secretKey, String email);
+    boolean existsBySecretKeyAndEmailAndIsAuth(String secretKey, String email, char isAuth);
 
 //    /**
 //     * @method : saveSignupMail

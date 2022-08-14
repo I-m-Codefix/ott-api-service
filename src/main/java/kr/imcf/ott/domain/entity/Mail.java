@@ -1,9 +1,8 @@
 package kr.imcf.ott.domain.entity;
 
 import kr.imcf.ott.common.type.MailType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -15,6 +14,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 public class Mail {
     @Id

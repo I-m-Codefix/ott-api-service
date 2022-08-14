@@ -1,4 +1,4 @@
-package kr.imcf.ott.account.oauth2.social.kakao;
+package kr.imcf.ott.account.oauth2.login.social.kakao;
 
 import lombok.*;
 

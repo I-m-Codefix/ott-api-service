@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtProps {
 
+    @Value("${oauth2.header.name}")
+    public String jwtHeaderName;
 
     @Value("${oauth2.jwt.issuer}")
     public String jwtIssuer;
