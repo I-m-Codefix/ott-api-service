@@ -11,7 +11,5 @@ public class CategoryController {
     private final CategoryService CategoryService;
 
     @GetMapping("/service/ott/category")
-    public ResponseEntity<?> getCategoryList() {
-        return ResponseEntity.ok(CategoryService.getCategoryList());
-    }
+    public ResponseEntity<?> getCategoryList() {return ResponseEntity.ok(CategoryService.getCategoryList());}
 }

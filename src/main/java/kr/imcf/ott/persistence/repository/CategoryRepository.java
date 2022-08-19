@@ -13,6 +13,6 @@ public class CategoryRepository {
     private final EntityManager em;
 
     public List<Category> findAll() {
-        return em.createQuery("select c from TBL_CATEGORY c where c.parent_id is NULL", Category.class).getResultList();
+        return em.createQuery("select c from TBL_CATEGORY c where c.parent is NULL", Category.class).getResultList();
     }
 }

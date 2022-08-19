@@ -19,18 +19,23 @@ public class Category extends TimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private long id;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "category_name", nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
-    private String category_name;
+    @Column(name = "categoryName",  nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
+    private String categoryName;
 
-    @Column(name = "use_yn", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'", length = 1)
-    private char use_yn = 'Y';
+    @Column(name = "useYN", nullable = false)
+    private char useYn = 'Y';
 
-    @Column(name = "parent_id", nullable = false)
-    private long parent_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent")
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Streaming> streamings = new HashSet<Streaming>();
+
 }

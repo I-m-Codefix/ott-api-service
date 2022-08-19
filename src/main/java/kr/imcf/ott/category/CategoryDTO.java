@@ -4,7 +4,6 @@ import kr.imcf.ott.domain.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,15 +12,14 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CategoryDTO {
     private Long id;
-    private String name;
-    private List<CategoryDTO> categoryList;
+    private String categoryName;
+    private List<CategoryDTO> subCategoryList;
 
     public static CategoryDTO of(Category category) {
         return new CategoryDTO(
                 category.getId(),
-                category.getCategory_name(),
-                null
-//                category.getCategoryList().stream().map(CategoryDTO::of).collect(Collectors.toList())
+                category.getCategoryName(),
+                category.getChildren().stream().map(CategoryDTO::of).collect(Collectors.toList())
         );
     }
 }
