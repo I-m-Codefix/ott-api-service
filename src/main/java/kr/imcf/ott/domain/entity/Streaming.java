@@ -2,6 +2,7 @@ package kr.imcf.ott.domain.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -59,5 +60,4 @@ public class Streaming extends TimeEntity{
 
     @Column(name = "unlike_count", nullable = false)
     private long unLikeCount;
-
 }

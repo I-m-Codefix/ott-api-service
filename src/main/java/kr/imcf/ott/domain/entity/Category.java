@@ -33,7 +33,7 @@ public class Category extends TimeEntity{
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
-    private List<Category> children = new ArrayList<>();
+    private List<Category> subCategoryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Streaming> streamings = new HashSet<Streaming>();

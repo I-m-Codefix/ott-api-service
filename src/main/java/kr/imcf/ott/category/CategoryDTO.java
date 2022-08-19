@@ -19,7 +19,7 @@ public class CategoryDTO {
         return new CategoryDTO(
                 category.getId(),
                 category.getCategoryName(),
-                category.getChildren().stream().map(CategoryDTO::of).collect(Collectors.toList())
+                category.getSubCategoryList().stream().map(CategoryDTO::of).collect(Collectors.toList())
         );
     }
 }

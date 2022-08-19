@@ -1,6 +1,8 @@
 package kr.imcf.ott.category;
 
+import kr.imcf.ott.domain.entity.Category;
 import kr.imcf.ott.persistence.repository.CategoryRepository;
+import kr.imcf.ott.persistence.repository.CategoryRepositoryJPA;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +16,21 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryRepositoryJPA categoryRepositoryJPA;
 
     public List<CategoryDTO> getCategoryList() {
         List<CategoryDTO> results = categoryRepository.findAll().stream().map(CategoryDTO::of).collect(Collectors.toList());
         return results;
+    }
+
+    public boolean addCategory(Category parentId, String categoryName){
+
+        Category newCategory = new Category();
+        newCategory.setParent(parentId);
+        newCategory.setCategoryName(categoryName);
+        categoryRepositoryJPA.save(newCategory);
+
+        return true;
     }
 
 }
