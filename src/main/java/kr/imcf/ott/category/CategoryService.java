@@ -23,14 +23,9 @@ public class CategoryService {
         return results;
     }
 
-    public boolean addCategory(Category parentId, String categoryName){
-
-        Category newCategory = new Category();
-        newCategory.setParent(parentId);
-        newCategory.setCategoryName(categoryName);
-        categoryRepositoryJPA.save(newCategory);
-
+    public boolean addCategory(Category category){
+        if(category == null) return false;
+        categoryRepositoryJPA.save(category);
         return true;
     }
-
 }
