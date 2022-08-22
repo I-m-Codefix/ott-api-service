@@ -4,6 +4,8 @@ import kr.imcf.ott.domain.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

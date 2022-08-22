@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +20,7 @@ public class CategoryService {
     private final CategoryRepositoryJPA categoryRepositoryJPA;
 
     public List<CategoryDTO> getCategoryList() {
-        List<CategoryDTO> results = categoryRepository.findAll().stream().map(CategoryDTO::of).collect(Collectors.toList());
+        List<CategoryDTO> results = categoryRepository.findByIdChild(33L).stream().map(CategoryDTO::of).collect(Collectors.toList());
         return results;
     }
 
@@ -27,5 +28,32 @@ public class CategoryService {
         if(category == null) return false;
         categoryRepositoryJPA.save(category);
         return true;
+    }
+
+    public boolean modifyCategory(CategoryFixes categoryFixes){
+
+        Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
+
+        if(!category.isPresent())
+            return false;
+
+        category.get().setCategoryName(categoryFixes.getNewCategoryName());
+        category.get().setParent(categoryFixes.getNewParent());
+        categoryRepositoryJPA.save(category.get());
+        return true;
+    }
+
+    public void deleteCategory(Long id) {
+
+        List<CategoryDTO> results = categoryRepository.findByIdChild(id).stream().map(CategoryDTO::of).collect(Collectors.toList());
+
+        if(results.isEmpty())
+            return;
+
+
+
+
+
+
     }
 }

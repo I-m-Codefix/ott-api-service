@@ -2,6 +2,7 @@ package kr.imcf.ott.domain.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class Category extends TimeEntity{
 
     @Id
@@ -38,4 +40,8 @@ public class Category extends TimeEntity{
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Streaming> streamings = new HashSet<Streaming>();
 
+    @Override
+    public String toString(){
+        return "id : " +this.id+", categoryName : "+this.categoryName+ ", parent : { "+this.parent+" }";
+    }
 }

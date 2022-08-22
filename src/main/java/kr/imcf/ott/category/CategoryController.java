@@ -43,4 +43,16 @@ public class CategoryController {
 
         return new ResponseEntity<>(Message.builder().code(200).response("카테고리를 추가했습니다.").build(), HttpStatus.OK);
     }
+
+    @PutMapping("/service/ott/category")
+    public ResponseEntity<?> modifyCategory(@RequestBody CategoryFixes categoryFixes){
+
+        if (categoryFixes.getReqType().equals("UPDATE"))
+            categoryService.modifyCategory(categoryFixes);
+        else if (categoryFixes.getReqType().equals("DELETE"))
+            categoryService.deleteCategory(categoryFixes.getId());
+
+
+        return new ResponseEntity<>(Message.builder().code(200).response("카테고리의 수정이 완료되었습니다.").build(), HttpStatus.OK);
+    }
 }
