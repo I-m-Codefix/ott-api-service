@@ -5,10 +5,8 @@ import kr.imcf.ott.persistence.repository.CategoryRepository;
 import kr.imcf.ott.persistence.repository.CategoryRepositoryJPA;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,40 +18,57 @@ public class CategoryService {
     private final CategoryRepositoryJPA categoryRepositoryJPA;
 
     public List<CategoryDTO> getCategoryList() {
-        List<CategoryDTO> results = categoryRepository.findByIdChild(33L).stream().map(CategoryDTO::of).collect(Collectors.toList());
+        List<CategoryDTO> results = categoryRepository.findAll().stream().filter(CategoryDTO -> CategoryDTO.getUseYn() == 'Y').map(CategoryDTO::of).collect(Collectors.toList());
         return results;
     }
 
-    public boolean addCategory(Category category){
-        if(category == null) return false;
+    public CategoryResponse addCategory(Category category){
+
+        if(categoryRepositoryJPA.findById(category.getParent().getId()).get().getUseYn() == 'N')
+            return CategoryResponse.builder().code(500).response("상위카테고리가 없습니다. "+category.toString()).build();
+
         categoryRepositoryJPA.save(category);
-        return true;
+        return CategoryResponse.builder().code(200).response("카테고리 추가완료. "+category.toString()).build();
     }
 
-    public boolean modifyCategory(CategoryFixes categoryFixes){
+    public CategoryResponse modifyCategory(CategoryFixesRequest categoryFixes){
+
+        //CategoryResponse로 리펙토링??
+        //이렇게 response를 service에서 작성해서 보내는게 맞는가? vs String으로 response를 보내주는게 맞는가?
+        //CategoryResponse는 controller에서 빌드해주어서 보내는게 맞지않나?
+        //service에서 response에 여러 상황에 따른 메세지를 각각 넣어서 보내주려고 할 때 최고의 방법이 무엇인가? 2개인 경우에는 boolean이 맞는가 << 메모리 관련해서 생각해볼일?
+        //CRUD가 이루어 졌을 때 결과값을 모두 반환해주어야 하는가? 혹은 바뀐 데이터까지 보기 편하도록 보내주어야하나?
+        //service 단에서 reqType을 비교해줘야하나?
 
         Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
 
-        if(!category.isPresent())
-            return false;
+        if(category.get().getParent().getUseYn() == 'N')
+            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.. "+category.toString()).build();
 
         category.get().setCategoryName(categoryFixes.getNewCategoryName());
         category.get().setParent(categoryFixes.getNewParent());
+        category.get().setUseYn('Y');
         categoryRepositoryJPA.save(category.get());
-        return true;
+
+        return CategoryResponse.builder().code(200).response("카테고리가 수정되었습니다. "+category.get().toString()).build();
     }
 
-    public void deleteCategory(Long id) {
+    public CategoryResponse deleteCategory(Long id) {
 
-        List<CategoryDTO> results = categoryRepository.findByIdChild(id).stream().map(CategoryDTO::of).collect(Collectors.toList());
-
-        if(results.isEmpty())
-            return;
-
-
-
-
-
-
+        Optional<Category> category = categoryRepositoryJPA.findById(id);
+        //해당 id의 카테고리가 존재하지 않으면 false
+        //해당 id의 카테고리.parent가 null(최상단 카테고리)면 false
+        if(category.get().getParent() == null)
+            return CategoryResponse.builder().code(500).response("최상단 카테고리는 삭제가 불가능합니다. "+category.get().toString()).build();
+        //해당 id의 카테고리.subCategoryList가 존재하면(상위 카테고리가 존재하면) false
+        if(category.get().getSubCategoryList().stream().anyMatch(c -> c.getUseYn() == 'Y') )
+            return CategoryResponse.builder().code(500).response("하위 카테고리가 존재하는 카테고리는 삭제가 불가능합니다. "+category.get().toString()).build();
+        //해당 id의 카테고리.subCategoryList가 존재하지 않으면(하위 카테고리가 없으면)  useYn = N으로 바꾼다. true
+        else {
+            category.get().setUseYn('N');
+            categoryRepositoryJPA.save(category.get());
+        }
+        return CategoryResponse.builder().code(200).response("카테고리가 삭제되었습니다. "+category.get().toString()).build();
     }
+
 }

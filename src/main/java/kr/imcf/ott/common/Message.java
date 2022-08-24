@@ -11,6 +11,4 @@ import lombok.experimental.SuperBuilder;
 public class Message {
     private int code;
     private String response;
-
-
 }

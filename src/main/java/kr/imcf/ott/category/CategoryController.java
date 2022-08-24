@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,37 +21,27 @@ public class CategoryController {
         List<CategoryDTO> response = categoryService.getCategoryList();
 
         if(response == null)
-            return new ResponseEntity<>(Message.builder().code(500).response("조회할 카테고리가 없습니다.").build(), HttpStatus.OK);
+            return new ResponseEntity<>(CategoryListResponse.builder().code(500).response("조회할 카테고리가 없습니다.").build(), HttpStatus.OK);
 
-        CategoryResponse categoryResponse =
-                        CategoryResponse.builder()
-                        .code(200)
-                        .httpStatus(HttpStatus.OK)
-                        .message("카테고리를 조회합니다.")
-                        .result(response)
-                        .build();
-
-        return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
+        return new ResponseEntity<>(CategoryListResponse.builder().code(200).response("카테고리를 조회합니다.").result(response).build(), HttpStatus.OK);
     }
 
     @PostMapping("/service/ott/category") //valid
     public ResponseEntity<?> addCategory(@RequestBody @Nullable Category category){
-
-        if(!categoryService.addCategory(category))
-            return new ResponseEntity<>(Message.builder().code(500).response("카테고리를 추가하지 못했습니다.").build(), HttpStatus.OK);
-
-        return new ResponseEntity<>(Message.builder().code(200).response("카테고리를 추가했습니다.").build(), HttpStatus.OK);
+        CategoryResponse response = categoryService.addCategory(category);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/service/ott/category")
-    public ResponseEntity<?> modifyCategory(@RequestBody CategoryFixes categoryFixes){
+    public ResponseEntity<?> modifyCategory(@RequestBody @Nullable CategoryFixesRequest categoryFixesRequest){
 
-        if (categoryFixes.getReqType().equals("UPDATE"))
-            categoryService.modifyCategory(categoryFixes);
-        else if (categoryFixes.getReqType().equals("DELETE"))
-            categoryService.deleteCategory(categoryFixes.getId());
+        CategoryResponse response = null;
 
+        if (categoryFixesRequest.getReqType().equals("UPDATE"))
+            response = categoryService.modifyCategory(categoryFixesRequest);
+        else if (categoryFixesRequest.getReqType().equals("DELETE"))
+            response = categoryService.deleteCategory(categoryFixesRequest.getId());
 
-        return new ResponseEntity<>(Message.builder().code(200).response("카테고리의 수정이 완료되었습니다.").build(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

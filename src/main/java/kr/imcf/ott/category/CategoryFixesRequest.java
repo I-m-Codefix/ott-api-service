@@ -10,12 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryFixes {
-
+public class CategoryFixesRequest {
     private String reqType;
     private Long id;
     private Category newParent;
     private String newCategoryName;
-
-
 }

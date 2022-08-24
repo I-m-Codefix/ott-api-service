@@ -4,7 +4,6 @@ import kr.imcf.ott.domain.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,13 +14,15 @@ import java.util.stream.Collectors;
 public class CategoryDTO {
     private Long id;
     private String categoryName;
+    private char useYn;
     private List<CategoryDTO> subCategoryList;
 
     public static CategoryDTO of(Category category) {
         return new CategoryDTO(
                 category.getId(),
                 category.getCategoryName(),
-                category.getSubCategoryList().stream().map(CategoryDTO::of).collect(Collectors.toList())
+                category.getUseYn(),
+                category.getSubCategoryList().stream().filter(CategoryDTO -> CategoryDTO.getUseYn() == 'Y').map(CategoryDTO::of).collect(Collectors.toList())
         );
     }
 }

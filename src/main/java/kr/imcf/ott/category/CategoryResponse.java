@@ -1,18 +1,18 @@
 package kr.imcf.ott.category;
 
-import lombok.*;
-import org.springframework.http.HttpStatus;
-
-import java.util.List;
+import kr.imcf.ott.common.Message;
+import kr.imcf.ott.domain.entity.Category;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryResponse {
-    private Integer code;
-    private HttpStatus httpStatus;
-    private String message;
-    private List<CategoryDTO> result;
+public class CategoryResponse extends Message {
+    private Category result;
 }

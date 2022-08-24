@@ -42,6 +42,10 @@ public class Category extends TimeEntity{
 
     @Override
     public String toString(){
-        return "id : " +this.id+", categoryName : "+this.categoryName+ ", parent : { "+this.parent+" }";
+        return "{ id : " +this.id+
+                ", categoryName : "+this.categoryName+
+                ", useYn : "+this.useYn+
+                ", parent : "+this.parent.id+
+                " , list : " + this.subCategoryList +" } ";
     }
 }
