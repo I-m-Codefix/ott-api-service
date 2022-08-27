@@ -3,6 +3,7 @@ package kr.imcf.ott.domain.entity;
 
 import kr.imcf.ott.common.type.PlatformType;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class Account extends TimeEntity {
 
     @Id
@@ -21,7 +23,7 @@ public class Account extends TimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
     private String name;
 
     @Column(name = "password", nullable = false)
@@ -42,9 +44,6 @@ public class Account extends TimeEntity {
 
     @Column(name = "accessToken", nullable = true)
     private String accessToken;
-
-    @Column(name = "refreshToken", nullable = true)
-    private String refreshToken;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private Set<Mail> mails;
