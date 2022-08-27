@@ -23,12 +23,12 @@ public class CategoryService {
     }
 
     public CategoryResponse addCategory(Category category){
-
-        if(categoryRepositoryJPA.findById(category.getParent().getId()).get().getUseYn() == 'N')
-            return CategoryResponse.builder().code(500).response("상위카테고리가 없습니다. "+category.toString()).build();
+        if(category.getParent() != null)
+            if(categoryRepositoryJPA.findById(category.getParent().getId()).get().getUseYn() == 'N')
+                return CategoryResponse.builder().code(500).response("상위카테고리가 없습니다. ").result(category).build();
 
         categoryRepositoryJPA.save(category);
-        return CategoryResponse.builder().code(200).response("카테고리 추가완료. "+category.toString()).build();
+        return CategoryResponse.builder().code(200).response("카테고리 추가완료. ").result(category).build();
     }
 
     public CategoryResponse modifyCategory(CategoryFixesRequest categoryFixes){
@@ -43,14 +43,14 @@ public class CategoryService {
         Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
 
         if(category.get().getParent().getUseYn() == 'N')
-            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.. "+category.toString()).build();
+            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.. ").result(category.get()).build();
 
         category.get().setCategoryName(categoryFixes.getNewCategoryName());
         category.get().setParent(categoryFixes.getNewParent());
         category.get().setUseYn('Y');
         categoryRepositoryJPA.save(category.get());
 
-        return CategoryResponse.builder().code(200).response("카테고리가 수정되었습니다. "+category.get().toString()).build();
+        return CategoryResponse.builder().code(200).response("카테고리가 수정되었습니다. ").result(category.get()).build();
     }
 
     public CategoryResponse deleteCategory(Long id) {
@@ -59,16 +59,16 @@ public class CategoryService {
         //해당 id의 카테고리가 존재하지 않으면 false
         //해당 id의 카테고리.parent가 null(최상단 카테고리)면 false
         if(category.get().getParent() == null)
-            return CategoryResponse.builder().code(500).response("최상단 카테고리는 삭제가 불가능합니다. "+category.get().toString()).build();
+            return CategoryResponse.builder().code(500).response("최상단 카테고리는 삭제가 불가능합니다. "+category).result(category.get()).build();
         //해당 id의 카테고리.subCategoryList가 존재하면(상위 카테고리가 존재하면) false
         if(category.get().getSubCategoryList().stream().anyMatch(c -> c.getUseYn() == 'Y') )
-            return CategoryResponse.builder().code(500).response("하위 카테고리가 존재하는 카테고리는 삭제가 불가능합니다. "+category.get().toString()).build();
+            return CategoryResponse.builder().code(500).response("하위 카테고리가 존재하는 카테고리는 삭제가 불가능합니다. ").result(category.get()).build();
         //해당 id의 카테고리.subCategoryList가 존재하지 않으면(하위 카테고리가 없으면)  useYn = N으로 바꾼다. true
         else {
             category.get().setUseYn('N');
             categoryRepositoryJPA.save(category.get());
         }
-        return CategoryResponse.builder().code(200).response("카테고리가 삭제되었습니다. "+category.get().toString()).build();
+        return CategoryResponse.builder().code(200).response("카테고리가 삭제되었습니다. ").result(category.get()).build();
     }
 
 }
