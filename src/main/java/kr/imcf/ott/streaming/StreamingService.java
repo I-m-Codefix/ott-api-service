@@ -15,7 +15,7 @@ public class StreamingService {
     private final StreamingRepository streamingRepository;
 
     public List<StreamingDTO> getStreamingList(Long categoryId) {
-        List<StreamingDTO> results = streamingRepository.findByAllCategoryId(categoryId).stream().map(StreamingDTO::of).collect(Collectors.toList());
+        List<StreamingDTO> results = streamingRepository.findByCategoryId(categoryId).stream().map(StreamingDTO::of).collect(Collectors.toList());
         return results;
     }
 

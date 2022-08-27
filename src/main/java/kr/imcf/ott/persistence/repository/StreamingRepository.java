@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StreamingRepository extends JpaRepository <Streaming, Long> {
-    List<Streaming> findByAllCategoryId(Long categoryId);
+    List<Streaming> findByCategoryId(Long categoryId);
     Optional<Streaming> findById(Long id);
 }
