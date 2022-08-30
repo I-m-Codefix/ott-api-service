@@ -8,15 +8,8 @@ import lombok.Getter;
 @Getter
 public class OAuth2ClientInfoWrapper {
     private PlatformType platformType;
+    private String clientId;
+    private String redirectUri;
     private String reqTime;
     private String uri;
-    private QueryString queryString;
-
-    @Builder
-    @Getter
-    static class QueryString{
-        private String client_id;
-        private String redirect_uri;
-        private String response_type;
-    }
 }
