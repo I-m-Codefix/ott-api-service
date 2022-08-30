@@ -15,4 +15,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class CategoryResponse extends Message {
     private Category result;
+
+    @Override
+    public String toString(){
+        return result.toString();
+    }
 }

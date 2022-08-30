@@ -23,12 +23,12 @@ public class CategoryService {
     }
 
     public CategoryResponse addCategory(Category category){
-
-        if(categoryRepositoryJPA.findById(category.getParent().getId()).get().getUseYn() == 'N')
-            return CategoryResponse.builder().code(500).response("상위카테고리가 없습니다. "+category.toString()).build();
+        if(category.getParent() != null)
+            if(categoryRepositoryJPA.findById(category.getParent().getId()).get().getUseYn() == 'N')
+                return CategoryResponse.builder().code(500).response("상위카테고리가 없습니다. ").result(category).build();
 
         categoryRepositoryJPA.save(category);
-        return CategoryResponse.builder().code(200).response("카테고리 추가완료. "+category.toString()).build();
+        return CategoryResponse.builder().code(200).response("카테고리 추가완료. ").result(category).build();
     }
 
     public CategoryResponse modifyCategory(CategoryFixesRequest categoryFixes){
@@ -40,17 +40,25 @@ public class CategoryService {
         //CRUD가 이루어 졌을 때 결과값을 모두 반환해주어야 하는가? 혹은 바뀐 데이터까지 보기 편하도록 보내주어야하나?
         //service 단에서 reqType을 비교해줘야하나?
 
-        Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
+        //nullPoint가 생길 수 있는 곳은 optional로 리팩토링 요망
 
-        if(category.get().getParent().getUseYn() == 'N')
-            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.. "+category.toString()).build();
+        Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
+        if(!category.isPresent())
+            return CategoryResponse.builder().code(500).response("해당 id는 존재하지 않습니다.").result(category.get()).build();
+
+
+        if(category.get().getParent() == null) { //수정하려는 카테고리가 최상단 카테고리일 경우 리팩토링
+            //검사만 해주면 됨
+        }
+        else if(category.get().getParent().getUseYn() == 'N')
+            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.").result(category.get()).build();
 
         category.get().setCategoryName(categoryFixes.getNewCategoryName());
         category.get().setParent(categoryFixes.getNewParent());
         category.get().setUseYn('Y');
         categoryRepositoryJPA.save(category.get());
 
-        return CategoryResponse.builder().code(200).response("카테고리가 수정되었습니다. "+category.get().toString()).build();
+        return CategoryResponse.builder().code(200).response("카테고리가 수정되었습니다. ").result(category.get()).build();
     }
 
     public CategoryResponse deleteCategory(Long id) {
@@ -59,16 +67,16 @@ public class CategoryService {
         //해당 id의 카테고리가 존재하지 않으면 false
         //해당 id의 카테고리.parent가 null(최상단 카테고리)면 false
         if(category.get().getParent() == null)
-            return CategoryResponse.builder().code(500).response("최상단 카테고리는 삭제가 불가능합니다. "+category.get().toString()).build();
+            return CategoryResponse.builder().code(500).response("최상단 카테고리는 삭제가 불가능합니다. "+category).result(category.get()).build();
         //해당 id의 카테고리.subCategoryList가 존재하면(상위 카테고리가 존재하면) false
         if(category.get().getSubCategoryList().stream().anyMatch(c -> c.getUseYn() == 'Y') )
-            return CategoryResponse.builder().code(500).response("하위 카테고리가 존재하는 카테고리는 삭제가 불가능합니다. "+category.get().toString()).build();
+            return CategoryResponse.builder().code(500).response("하위 카테고리가 존재하는 카테고리는 삭제가 불가능합니다. ").result(category.get()).build();
         //해당 id의 카테고리.subCategoryList가 존재하지 않으면(하위 카테고리가 없으면)  useYn = N으로 바꾼다. true
         else {
             category.get().setUseYn('N');
             categoryRepositoryJPA.save(category.get());
         }
-        return CategoryResponse.builder().code(200).response("카테고리가 삭제되었습니다. "+category.get().toString()).build();
+        return CategoryResponse.builder().code(200).response("카테고리가 삭제되었습니다. ").result(category.get()).build();
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class StreamingDTO {
     private Long id;
-    private Category category;
+    private Long categoryId; // long으로 수정
     private String ottName;
     private String ottThumbnail;
     private String ottS3Id;
@@ -31,23 +31,38 @@ public class StreamingDTO {
     private Long unlikeCount;
 
     public static StreamingDTO of(Streaming streaming) {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.createTypeMap(Streaming.class, StreamingDTO.class)
-                .addMapping(Streaming::getId, StreamingDTO::setId)
-                .addMapping(Streaming::getCategory, StreamingDTO::setCategory)
-                .addMapping(Streaming::getOttName, StreamingDTO::setOttName)
-                .addMapping(Streaming::getOttThumbnail, StreamingDTO::setOttThumbnail)
-                .addMapping(Streaming::getOttS3Id, StreamingDTO::setOttS3Id)
-                .addMapping(Streaming::getOttDesc, StreamingDTO::setOttDescDetail)
-                .addMapping(Streaming::getPlayUri, StreamingDTO::setPlayUri)
-                .addMapping(Streaming::getPlayTime, StreamingDTO::setPlayTime)
-                .addMapping(Streaming::getStatus, StreamingDTO::setStatus)
-                .addMapping(Streaming::getRegAdminId, StreamingDTO::setRegAdminId)
-                .addMapping(Streaming::getViewCount, StreamingDTO::setViewCount)
-                .addMapping(Streaming::getLikeCount, StreamingDTO::setLikeCount)
-                .addMapping(Streaming::getUnLikeCount, StreamingDTO::setUnlikeCount);
+//        ModelMapper modelMapper = new ModelMapper();
+//        modelMapper.createTypeMap(Streaming.class, StreamingDTO.class)
+//                .addMapping(Streaming::getId, StreamingDTO::setId)
+//                .addMapping(Streaming::getCategory, StreamingDTO::setCategory)
+//                .addMapping(Streaming::getOttName, StreamingDTO::setOttName)
+//                .addMapping(Streaming::getOttThumbnail, StreamingDTO::setOttThumbnail)
+//                .addMapping(Streaming::getOttS3Id, StreamingDTO::setOttS3Id)
+//                .addMapping(Streaming::getOttDesc, StreamingDTO::setOttDescDetail)
+//                .addMapping(Streaming::getPlayUri, StreamingDTO::setPlayUri)
+//                .addMapping(Streaming::getPlayTime, StreamingDTO::setPlayTime)
+//                .addMapping(Streaming::getStatus, StreamingDTO::setStatus)
+//                .addMapping(Streaming::getRegAdminId, StreamingDTO::setRegAdminId)
+//                .addMapping(Streaming::getViewCount, StreamingDTO::setViewCount)
+//                .addMapping(Streaming::getLikeCount, StreamingDTO::setLikeCount)
+//                .addMapping(Streaming::getUnLikeCount, StreamingDTO::setUnlikeCount);
 
-        return modelMapper.map(streaming, StreamingDTO.class);
+        return new StreamingDTO(
+                streaming.getId(),
+                streaming.getCategory().getId(),
+                streaming.getOttName(),
+                streaming.getOttThumbnail(),
+                streaming.getOttS3Id(),
+                streaming.getOttDesc(),
+                streaming.getOttDesc(),
+                streaming.getOttDescDetail(),
+                streaming.getPlayUri(),
+                streaming.getPlayTime(),
+                streaming.getStatus(),
+                streaming.getViewCount(),
+                streaming.getLikeCount(),
+                streaming.getUnLikeCount()
+        );
     }
 
 }
