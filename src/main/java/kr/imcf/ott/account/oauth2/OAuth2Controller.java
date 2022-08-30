@@ -39,7 +39,7 @@ public class OAuth2Controller {
         else{
             kakaoClientInfoWrapper = OAuth2ClientInfoWrapper.builder()
                     .clientId(oAuth2Props.kakaoClientId)
-                    .redirectUri(oAuth2Props.kakaoRedirectUri)
+                    .redirectUri(redirect_uri)
                     .platformType(PlatformType.KAKAO)
                     .uri(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
                             oAuth2Props.kakaoAuthUri, oAuth2Props.kakaoClientId, redirect_uri, "code"))
