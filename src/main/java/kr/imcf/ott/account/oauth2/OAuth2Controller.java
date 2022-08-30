@@ -26,11 +26,15 @@ public class OAuth2Controller {
     @GetMapping("/info/oauth2/kakao/client-id")
     public ResponseEntity<OAuth2ClientInfoWrapper> kakaoClientId(){
         OAuth2ClientInfoWrapper kakaoClientInfoWrapper = OAuth2ClientInfoWrapper.builder()
-                .clientId(oAuth2Props.kakaoClientId)
-                .redirectUri(oAuth2Props.kakaoRedirectUri)
                 .platformType(PlatformType.KAKAO)
-                .uri(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
-                        oAuth2Props.kakaoAuthUri,oAuth2Props.kakaoClientId, oAuth2Props.kakaoRedirectUri, "code"))
+                .uri(oAuth2Props.kakaoAuthUri)
+                .queryString(
+                        OAuth2ClientInfoWrapper.QueryString.builder()
+                        .client_id(oAuth2Props.kakaoClientId)
+                        .redirect_uri(oAuth2Props.kakaoRedirectUri)
+                        .response_type("code")
+                        .build()
+                )
                 .reqTime(TimeUtils.now()).build();
 
         return new ResponseEntity<>(kakaoClientInfoWrapper, HttpStatus.OK);
