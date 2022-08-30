@@ -13,15 +13,16 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CategoryDTO {
     private Long id;
-    private String name;
-    private List<CategoryDTO> categoryList;
+    private String categoryName;
+    private char useYn;
+    private List<CategoryDTO> subCategoryList;
 
     public static CategoryDTO of(Category category) {
         return new CategoryDTO(
                 category.getId(),
-                category.getCategory_name(),
-                null
-//                category.getCategoryList().stream().map(CategoryDTO::of).collect(Collectors.toList())
+                category.getCategoryName(),
+                category.getUseYn(),
+                category.getSubCategoryList().stream().filter(CategoryDTO -> CategoryDTO.getUseYn() == 'Y').map(CategoryDTO::of).collect(Collectors.toList())
         );
     }
 }

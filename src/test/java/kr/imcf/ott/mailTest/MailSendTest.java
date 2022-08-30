@@ -47,6 +47,7 @@ public class MailSendTest {
                 .password("password")
                 .platformType(PlatformType.IMCF)
                 .accessToken("ACCESSTOKEN")
+//                .refreshToken("REFRESHTOKEN")
                 .profileImage("PROFILE")
                 .build();
 

@@ -1,8 +1,6 @@
 package kr.imcf.ott.domain.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,7 +11,12 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Streaming extends TimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,5 +62,4 @@ public class Streaming extends TimeEntity{
 
     @Column(name = "unlike_count", nullable = false)
     private long unLikeCount;
-
 }
