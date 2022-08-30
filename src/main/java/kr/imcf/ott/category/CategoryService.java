@@ -40,10 +40,18 @@ public class CategoryService {
         //CRUD가 이루어 졌을 때 결과값을 모두 반환해주어야 하는가? 혹은 바뀐 데이터까지 보기 편하도록 보내주어야하나?
         //service 단에서 reqType을 비교해줘야하나?
 
-        Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
+        //nullPoint가 생길 수 있는 곳은 optional로 리팩토링 요망
 
-        if(category.get().getParent().getUseYn() == 'N')
-            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.. ").result(category.get()).build();
+        Optional<Category> category = categoryRepositoryJPA.findById(categoryFixes.getId());
+        if(!category.isPresent())
+            return CategoryResponse.builder().code(500).response("해당 id는 존재하지 않습니다.").result(category.get()).build();
+
+
+        if(category.get().getParent() == null) { //수정하려는 카테고리가 최상단 카테고리일 경우 리팩토링
+            //검사만 해주면 됨
+        }
+        else if(category.get().getParent().getUseYn() == 'N')
+            return CategoryResponse.builder().code(500).response("상위카테고리가 없어서 카테고리 수정이 불가능합니다.").result(category.get()).build();
 
         category.get().setCategoryName(categoryFixes.getNewCategoryName());
         category.get().setParent(categoryFixes.getNewParent());
