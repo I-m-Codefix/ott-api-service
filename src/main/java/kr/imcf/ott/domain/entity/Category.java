@@ -44,7 +44,6 @@ public class Category extends TimeEntity{
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Streaming> streamings = new HashSet<Streaming>();
 
-    @Override
     public String toString(){
         return "{ id : " +this.id+
                 ", categoryName : "+this.categoryName+
