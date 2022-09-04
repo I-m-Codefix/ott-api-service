@@ -2,6 +2,8 @@ package kr.imcf.ott.common.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class ReflectionUtils {
@@ -22,6 +24,8 @@ public class ReflectionUtils {
                 Object value = method.invoke(classObject);
                 if(value == null)
                     value = "";
+                else if(AsciiUtils.isKorean(value.toString()))
+                    value = URLEncoder.encode(value.toString(), StandardCharsets.UTF_8);
 
                 if (queryString.equals(""))
                     queryString += first + field + eq + value;

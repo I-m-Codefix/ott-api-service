@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 // 서버 사이드에서 서블릿 조작을 돕는 클래스
 // script를 사용하기 위한 유틸리티
@@ -49,6 +47,6 @@ public class ScriptUtils {
 
     public static String getQueryString(String url, Object classObject)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        return URLEncoder.encode(url + ReflectionUtils.getInstanceAll(classObject, "?", "&", "="), StandardCharsets.UTF_8);
+        return url + ReflectionUtils.getInstanceAll(classObject, "?", "&", "=");
     }
 }
