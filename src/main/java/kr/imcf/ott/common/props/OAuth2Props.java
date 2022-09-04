@@ -39,4 +39,6 @@ public class OAuth2Props {
     @Value("${spring.security.oauth2.client.provider.kakao.user-name-attribute}")
     public String kakaoUserNameAttribute;
 
+    @Value("${spring.security.oauth2.client.registration.kakao.end-point}")
+    public String kakaoEndPoint;
 }

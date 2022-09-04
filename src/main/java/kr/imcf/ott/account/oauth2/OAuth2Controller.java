@@ -5,6 +5,7 @@ import kr.imcf.ott.account.oauth2.login.nonsocial.ServiceLoginRequest;
 import kr.imcf.ott.account.oauth2.login.social.kakao.KakaoService;
 import kr.imcf.ott.common.props.OAuth2Props;
 import kr.imcf.ott.common.type.PlatformType;
+import kr.imcf.ott.common.util.ScriptUtils;
 import kr.imcf.ott.common.util.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 @Controller
 @RequiredArgsConstructor
 public class OAuth2Controller {
@@ -24,27 +29,16 @@ public class OAuth2Controller {
     private final KakaoService kakaoService;
 
     @GetMapping("/info/oauth2/kakao/client-id")
-    public ResponseEntity<OAuth2ClientInfoWrapper> kakaoClientId(@RequestParam String redirect_uri){
+    public ResponseEntity<OAuth2ClientInfoWrapper> kakaoClientId() {
         OAuth2ClientInfoWrapper kakaoClientInfoWrapper = null;
 
-        if(redirect_uri == null || redirect_uri.equals("")) {
-            kakaoClientInfoWrapper = OAuth2ClientInfoWrapper.builder()
-                    .clientId(oAuth2Props.kakaoClientId)
-                    .redirectUri(oAuth2Props.kakaoRedirectUri)
-                    .platformType(PlatformType.KAKAO)
-                    .uri(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
-                            oAuth2Props.kakaoAuthUri, oAuth2Props.kakaoClientId, oAuth2Props.kakaoRedirectUri, "code"))
-                    .reqTime(TimeUtils.now()).build();
-        }
-        else{
-            kakaoClientInfoWrapper = OAuth2ClientInfoWrapper.builder()
-                    .clientId(oAuth2Props.kakaoClientId)
-                    .redirectUri(redirect_uri)
-                    .platformType(PlatformType.KAKAO)
-                    .uri(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
-                            oAuth2Props.kakaoAuthUri, oAuth2Props.kakaoClientId, redirect_uri, "code"))
-                    .reqTime(TimeUtils.now()).build();
-        }
+        kakaoClientInfoWrapper = OAuth2ClientInfoWrapper.builder()
+                .clientId(oAuth2Props.kakaoClientId)
+                .redirectUri(oAuth2Props.kakaoRedirectUri)
+                .platformType(PlatformType.KAKAO)
+                .uri(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
+                        oAuth2Props.kakaoAuthUri, oAuth2Props.kakaoClientId, oAuth2Props.kakaoRedirectUri, "code"))
+                .reqTime(TimeUtils.now()).build();
 
         return new ResponseEntity<>(kakaoClientInfoWrapper, HttpStatus.OK);
     }
@@ -68,9 +62,10 @@ public class OAuth2Controller {
      * @date : 2022/08/13
      **/
     @GetMapping("/login/oauth2/kakao")
-    public ResponseEntity<OAuth2LoginResponse> kakaoLogin(@RequestParam String code){
+    public ResponseEntity<OAuth2LoginResponse> kakaoLogin(HttpServletResponse servletResponse, @RequestParam String code) throws IOException, InvocationTargetException, IllegalAccessException {
         OAuth2LoginResponse response = kakaoService.login(code);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ScriptUtils.sendJsonData(servletResponse, oAuth2Props.kakaoEndPoint, response);
+        return null;
     }
 
 }
