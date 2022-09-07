@@ -1,7 +1,5 @@
 package kr.imcf.ott.comment;
-import kr.imcf.ott.category.CategoryDTO;
 import kr.imcf.ott.domain.entity.Account;
-import kr.imcf.ott.domain.entity.Category;
 import kr.imcf.ott.domain.entity.Comment;
 import kr.imcf.ott.domain.entity.Streaming;
 import lombok.AllArgsConstructor;
@@ -18,8 +16,11 @@ public class CommentDTO {
     private Long id;
     private String content;
     private char useYn;
-    private Account writer;
-    private Streaming streaming;
+    private Long writerId;
+    private String writerName;
+    private String writerProfileImageUri;
+    private Long streamingId;
+    private String streamingName;
     private List<CommentDTO> subCommentList;
 
 
@@ -28,8 +29,11 @@ public class CommentDTO {
                 comment.getId(),
                 comment.getContent(),
                 comment.getUseYn(),
-                comment.getWriter(),
-                comment.getStreaming(),
+                comment.getWriter().getId(),
+                comment.getWriter().getName(),
+                comment.getWriter().getProfileImage(),
+                comment.getStreaming().getId(),
+                comment.getStreaming().getOttName(),
                 comment.getSubCommentList().stream().filter(CommentDTO -> CommentDTO.getUseYn() == 'Y').map(CommentDTO::of).collect(Collectors.toList())
         );
     }

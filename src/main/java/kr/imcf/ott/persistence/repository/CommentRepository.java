@@ -1,6 +1,4 @@
 package kr.imcf.ott.persistence.repository;
-
-import kr.imcf.ott.domain.entity.Category;
 import kr.imcf.ott.domain.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
