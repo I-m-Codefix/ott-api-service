@@ -24,4 +24,8 @@ public class CommentService {
         return results;
     }
 
+    public List<CommentAccountDTO> getAccountCommentList(Long id) {
+        List<CommentAccountDTO> results = commentRepository.findAllByAccountId(id).stream().filter(c -> c.getWriter().getId() == id).map(CommentAccountDTO::of).collect(Collectors.toList());
+        return results;
+    }
 }

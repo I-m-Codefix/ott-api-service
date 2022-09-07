@@ -1,4 +1,5 @@
 package kr.imcf.ott.persistence.repository;
+import kr.imcf.ott.domain.entity.Category;
 import kr.imcf.ott.domain.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,5 +13,9 @@ public class CommentRepository {
 
     public List<Comment> findAll() {
         return em.createQuery("select c from TBL_COMMENT c where c.parent is NULL", Comment.class).getResultList();
+    }
+
+    public List<Comment> findAllByAccountId(Long id){
+        return em.createQuery("select c from TBL_COMMENT c where c.writer.id = "+id, Comment.class).getResultList();
     }
 }
