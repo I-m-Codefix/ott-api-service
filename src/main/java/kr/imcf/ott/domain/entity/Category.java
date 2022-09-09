@@ -16,11 +16,10 @@ import java.util.Set;
 @Entity(name = "TBL_CATEGORY")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category extends TimeEntity{
 
     @Id

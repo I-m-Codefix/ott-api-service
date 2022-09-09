@@ -24,13 +24,13 @@ public class CommentController {
 
     @GetMapping("/service/ott/commentAccount/{id}")
     public ResponseEntity<?> getAccountCommentList(@PathVariable("id") Long id) {
-        List<CommentAccountDTO> response = commentService.getAccountCommentList(id);
-        return new ResponseEntity<>(CommentAccountResponse.builder().code(200).response("사용자 댓글을 조회합니다.").result(response).build(), HttpStatus.OK);
+        CommentAccountResponse response = commentService.getAccountCommentList(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//    @GetMapping("/service/ott/commentStreaming/{id}")
-//    public ResponseEntity<?> getStreamingCommentList(@PathVariable("id") Long id) {
-//        List<CommentAccountDTO> response = commentService.getAccountCommentList(id);
-//        return new ResponseEntity<>(CommentAccountResponse.builder().code(200).response("사용자 댓글을 조회합니다.").result(response).build(), HttpStatus.OK);
-//    }
+    @GetMapping("/service/ott/commentStreaming/{id}")
+    public ResponseEntity<?> getStreamingCommentList(@PathVariable("id") Long id) {
+        CommentStreamingResponse response = commentService.getSteamingCommentList(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

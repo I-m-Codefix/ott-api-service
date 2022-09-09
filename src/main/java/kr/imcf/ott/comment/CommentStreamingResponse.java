@@ -7,17 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 @Getter
 @Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentAccountResponse extends Message {
-    private List<CommentAccountDTO> result;
+public class CommentStreamingResponse extends Message {
+    private List<CommentStreamingDTO> result;
 
 }

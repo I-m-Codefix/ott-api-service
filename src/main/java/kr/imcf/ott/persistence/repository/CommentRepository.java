@@ -18,4 +18,8 @@ public class CommentRepository {
     public List<Comment> findAllByAccountId(Long id){
         return em.createQuery("select c from TBL_COMMENT c where c.writer.id = "+id, Comment.class).getResultList();
     }
+    public List<Comment> findAllByStreamingId(Long id){
+        return em.createQuery("select c from TBL_COMMENT c where c.streaming.id = "+id, Comment.class).getResultList();
+    }
+
 }

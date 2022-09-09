@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentAccountDTO{
+public class CommentStreamingDTO {
     private Long id;
     private String content;
     private char useYn;
@@ -19,9 +19,10 @@ public class CommentAccountDTO{
     private String writerProfileImageUri;
     private Long streamingId;
     private String streamingName;
+    private List<CommentDTO> subCommentList;
 
-    public static CommentAccountDTO of(Comment comment) {
-        return new CommentAccountDTO(
+    public static CommentStreamingDTO of(Comment comment) {
+        return new CommentStreamingDTO(
                 comment.getId(),
                 comment.getContent(),
                 comment.getUseYn(),
@@ -29,7 +30,8 @@ public class CommentAccountDTO{
                 comment.getWriter().getName(),
                 comment.getWriter().getProfileImage(),
                 comment.getStreaming().getId(),
-                comment.getStreaming().getOttName()
+                comment.getStreaming().getOttName(),
+                comment.getSubCommentList().stream().filter(CommentDTO -> CommentDTO.getUseYn() == 'Y').map(CommentDTO::of).collect(Collectors.toList())
         );
     }
 
