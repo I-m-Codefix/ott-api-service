@@ -2,13 +2,15 @@ package kr.imcf.ott.comment;
 
 import kr.imcf.ott.category.CategoryDTO;
 import kr.imcf.ott.category.CategoryListResponse;
+import kr.imcf.ott.category.CategoryResponse;
+import kr.imcf.ott.domain.entity.Category;
+import kr.imcf.ott.domain.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -31,6 +33,13 @@ public class CommentController {
     @GetMapping("/service/ott/commentStreaming/{id}")
     public ResponseEntity<?> getStreamingCommentList(@PathVariable("id") Long id) {
         CommentStreamingResponse response = commentService.getSteamingCommentList(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/service/ott/comment") //valid
+    public ResponseEntity<?> addComment(@RequestBody @Nullable Comment comment){
+        CommentResponse response = commentService.addComment(comment);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
