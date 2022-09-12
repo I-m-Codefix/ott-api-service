@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class CommentRepositorySupportImpl {
+public class CommentRepositorySupportImpl implements CommentRepositorySupport{
     private final EntityManager em;
 
     public List<Comment> findAll() {

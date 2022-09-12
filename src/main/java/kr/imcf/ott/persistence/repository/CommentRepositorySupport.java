@@ -8,7 +8,5 @@ import java.util.List;
 public interface CommentRepositorySupport {
     public List<Comment> findAll();
     public List<Comment> findAllByAccountId(Long id);
-
     public List<Comment> findAllByStreamingId(Long id);
-
 }

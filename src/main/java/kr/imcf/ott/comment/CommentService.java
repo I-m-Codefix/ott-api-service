@@ -84,7 +84,6 @@ public class CommentService {
                         .response("댓글이 작성되었습니다.")
                         .result(comment)
                         .build();
-
         return response;
     }
 }
