@@ -3,7 +3,6 @@ package kr.imcf.ott.comment;
 import kr.imcf.ott.domain.entity.Comment;
 import kr.imcf.ott.persistence.repository.AccountRepository;
 import kr.imcf.ott.persistence.repository.CommentRepository;
-import kr.imcf.ott.persistence.repository.CommentRepositoryJPA;
 import kr.imcf.ott.persistence.repository.StreamingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final CommentRepositoryJPA commentRepositoryJPA;
     private final AccountRepository accountRepository;
     private final StreamingRepository streamingRepository;
 
@@ -78,7 +76,7 @@ public class CommentService {
         //"streaming": {"id" : }"
 
 
-        commentRepositoryJPA.save(comment);
+        commentRepository.save(comment);
         CommentResponse response =
                 CommentResponse
                         .builder()
