@@ -6,6 +6,8 @@ import kr.imcf.ott.persistence.repository.CommentRepository;
 import kr.imcf.ott.persistence.repository.StreamingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,9 @@ public class CommentService {
         return results;
     }
 
+    //paging
     public CommentAccountResponse getAccountCommentList(Long id) {
+        //== equal
         List<CommentAccountDTO> results = commentRepository.findAllByAccountId(id).stream().filter(c -> c.getWriter().getId() == id).map(CommentAccountDTO::of).collect(Collectors.toList());
 
         CommentAccountResponse response =
@@ -36,7 +40,9 @@ public class CommentService {
         return response;
     }
 
+    //paging
     public CommentStreamingResponse getSteamingCommentList(Long id) {
+        //== equal
         List<CommentStreamingDTO> results = commentRepository.findAll().stream().filter(c -> c.getStreaming().getId() == id).filter(c -> c.getUseYn() == 'Y').map(CommentStreamingDTO::of).collect(Collectors.toList());
 
 
@@ -55,6 +61,7 @@ public class CommentService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public CommentResponse addComment(Comment comment){
 
 //        Optional<Comment> parent = commentRepositoryJPA.findById(comment.getParent().getId());
