@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository extends CategoryRepositorySupport, JpaRepository<Category, Long>  {
-
+    List<Category> findByParentIsNull();
 }

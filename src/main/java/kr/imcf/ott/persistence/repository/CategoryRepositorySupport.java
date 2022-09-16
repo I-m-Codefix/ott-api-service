@@ -5,5 +5,5 @@ import kr.imcf.ott.domain.entity.Category;
 import java.util.List;
 
 public interface CategoryRepositorySupport {
-    List<Category> findAllParent();
+//    List<Category> findAllParent();
 }

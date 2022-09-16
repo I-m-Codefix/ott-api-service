@@ -17,7 +17,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<CategoryDTO> getCategoryList() {
-        List<CategoryDTO> results = categoryRepository.findAllParent().stream().filter(CategoryDTO -> CategoryDTO.getUseYn() == 'Y').map(CategoryDTO::of).collect(Collectors.toList());
+        List<CategoryDTO> results = categoryRepository.findByParentIsNull().stream().filter(CategoryDTO -> CategoryDTO.getUseYn() == 'Y').map(CategoryDTO::of).collect(Collectors.toList());
         return results;
     }
 

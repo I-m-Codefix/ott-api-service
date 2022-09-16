@@ -20,14 +20,14 @@ public class CommentService {
     private final StreamingRepository streamingRepository;
 
     public List<CommentDTO> getAllCommentList() {
-        List<CommentDTO> results = commentRepository.findAll().stream().filter(c -> c.getUseYn() == 'Y').map(CommentDTO::of).collect(Collectors.toList());
+        List<CommentDTO> results = commentRepository.findByParentIsNull().stream().filter(c -> c.getUseYn() == 'Y').map(CommentDTO::of).collect(Collectors.toList());
         return results;
     }
 
     //paging
     public CommentAccountResponse getAccountCommentList(Long id) {
         //== equal
-        List<CommentAccountDTO> results = commentRepository.findAllByAccountId(id).stream().filter(c -> c.getWriter().getId() == id).map(CommentAccountDTO::of).collect(Collectors.toList());
+        List<CommentAccountDTO> results = commentRepository.findByWriterId(id).stream().filter(c -> c.getWriter().getId() == id).map(CommentAccountDTO::of).collect(Collectors.toList());
 
         CommentAccountResponse response =
                 CommentAccountResponse
@@ -43,7 +43,7 @@ public class CommentService {
     //paging
     public CommentStreamingResponse getSteamingCommentList(Long id) {
         //== equal
-        List<CommentStreamingDTO> results = commentRepository.findAll().stream().filter(c -> c.getStreaming().getId() == id).filter(c -> c.getUseYn() == 'Y').map(CommentStreamingDTO::of).collect(Collectors.toList());
+        List<CommentStreamingDTO> results = commentRepository.findByParentIsNull().stream().filter(c -> c.getStreaming().getId() == id).filter(c -> c.getUseYn() == 'Y').map(CommentStreamingDTO::of).collect(Collectors.toList());
 
 
         CommentStreamingResponse response =
