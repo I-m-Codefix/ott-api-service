@@ -1,9 +1,5 @@
 package kr.imcf.ott.comment;
 
-import kr.imcf.ott.category.CategoryDTO;
-import kr.imcf.ott.category.CategoryListResponse;
-import kr.imcf.ott.category.CategoryResponse;
-import kr.imcf.ott.domain.entity.Category;
 import kr.imcf.ott.domain.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,10 +32,29 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @PostMapping("/service/ott/comment") //valid
     public ResponseEntity<?> addComment(@RequestBody @Nullable Comment comment){
         CommentResponse response = commentService.addComment(comment);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/service/ott/comment")
+    public ResponseEntity<?> modifyComment(@RequestBody CommentFixesRequest commentFixesRequest){
+        String temp = "잘못된 수정, 삭제 요청입니다.";
+        if(commentFixesRequest.getReqType().equals("UPDATE"))
+            temp = commentService.modifyComment(commentFixesRequest);
+        if(commentFixesRequest.getReqType().equals("DELETE"))
+            temp = commentService.deleteComment(commentFixesRequest);
+
+        CommentResponse response =
+                CommentResponse
+                        .builder()
+                        .response(temp)
+                        .code(200)
+                        .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 }

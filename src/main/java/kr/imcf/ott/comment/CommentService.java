@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,11 +32,11 @@ public class CommentService {
 
         CommentAccountResponse response =
                 CommentAccountResponse
-                .builder()
-                .code(200)
-                .response("회원님이 작성한 모든 댓글을 조회합니다.")//.get(0).getName 하면 index오류가 있음. 댓글이 없을때.
-                .result(results)
-                .build();
+                        .builder()
+                        .code(200)
+                        .response("회원님이 작성한 모든 댓글을 조회합니다.")//.get(0).getName 하면 index오류가 있음. 댓글이 없을때.
+                        .result(results)
+                        .build();
 
         return response;
     }
@@ -54,7 +55,7 @@ public class CommentService {
                         .result(results)
                         .build();
 
-        if(results.isEmpty()){
+        if (results.isEmpty()) {
             response.setResponse("아무런 댓글이 작성되지 않았습니다.");
         }
 
@@ -62,7 +63,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public CommentResponse addComment(Comment comment){
+    public CommentResponse addComment(Comment comment) {
 
 //        Optional<Comment> parent = commentRepositoryJPA.findById(comment.getParent().getId());
 //        Optional<Account> writer = accountRepository.findById(comment.getWriter().getId());
@@ -93,4 +94,24 @@ public class CommentService {
                         .build();
         return response;
     }
+
+    @Transactional(readOnly = false)
+    public String modifyComment(CommentFixesRequest request) {
+        Optional<Comment> comment = commentRepository.findById(request.getId());
+        comment.get().setContent(request.getContent());
+        return "댓글이 수정 되었습니다.";
+    }
+
+    @Transactional(readOnly = false)
+    public String deleteComment(CommentFixesRequest request) {
+        Optional<Comment> comment = commentRepository.findById(request.getId());
+        comment.get().setUseYn('N');
+        return "댓글이 삭제 되었습니다.";
+    }
+
 }
+
+
+
+
+
