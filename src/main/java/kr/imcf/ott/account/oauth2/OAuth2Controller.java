@@ -3,6 +3,9 @@ package kr.imcf.ott.account.oauth2;
 import kr.imcf.ott.account.oauth2.login.nonsocial.NonSocialLoginService;
 import kr.imcf.ott.account.oauth2.login.nonsocial.ServiceLoginRequest;
 import kr.imcf.ott.account.oauth2.login.social.kakao.KakaoService;
+import kr.imcf.ott.account.oauth2.logout.LogoutService;
+import kr.imcf.ott.common.Message;
+import kr.imcf.ott.common.props.JwtProps;
 import kr.imcf.ott.common.props.OAuth2Props;
 import kr.imcf.ott.common.type.PlatformType;
 import kr.imcf.ott.common.util.ScriptUtils;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +31,15 @@ public class OAuth2Controller {
     private final OAuth2Props oAuth2Props;
     private final NonSocialLoginService nonSocialLoginService;
     private final KakaoService kakaoService;
+    private final JwtProps jwtProps;
+    private final LogoutService logoutService;
 
+    /**
+    * @methodName: kakaoClientId
+    * @author: rojae
+    * @date: 2022/09/24
+    * @Description: 카카오 로그인 요청을 위한 정보 요청
+    */
     @GetMapping("/info/oauth2/kakao/client-id")
     public ResponseEntity<OAuth2ClientInfoWrapper> kakaoClientId() {
         OAuth2ClientInfoWrapper kakaoClientInfoWrapper = null;
@@ -53,6 +65,20 @@ public class OAuth2Controller {
     public ResponseEntity<OAuth2LoginResponse> serviceLogin(@RequestBody ServiceLoginRequest request) {
         OAuth2LoginResponse response = nonSocialLoginService.login(request.getEmail(), request.getPassword());
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * @methodName: logOut
+     * @author: rojae
+     * @date: 2022/09/24
+     * @Description: 로그아웃 API
+     */
+    @GetMapping("/login/oauth2/logout")
+    public ResponseEntity<Message> logout(HttpServletRequest httpServletRequest){
+        if(logoutService.logout(httpServletRequest.getHeader(jwtProps.jwtHeaderName)))
+            return new ResponseEntity<>(Message.builder().code(200).response("로그아웃에 성공했습니다").build(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(Message.builder().code(403).response("로그아웃에 실패했습니다").build(), HttpStatus.OK);
     }
 
     /**
