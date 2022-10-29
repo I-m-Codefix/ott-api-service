@@ -55,10 +55,10 @@ public class StreamingDTO {
                 streaming.getOttS3Id(),
                 streaming.getOttDesc(),
                 streaming.getOttDescDetail(),
-                streaming.getRegAdminId(),
                 streaming.getPlayUri(),
                 streaming.getPlayTime(),
                 streaming.getStatus(),
+                streaming.getRegAdminId(),
                 streaming.getViewCount(),
                 streaming.getLikeCount(),
                 streaming.getUnLikeCount()
