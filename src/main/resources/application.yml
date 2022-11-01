@@ -50,7 +50,7 @@ logging:
 #######################################
 spring:
   redis:
-    host: 52.78.83.150
+    host: ${REDIS_IP}
     port: 18089
     connect-timeout: 1000000
   main:
@@ -136,5 +136,5 @@ spring:
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       #      jdbc-url: jdbc:mysql://13.125.122.22:33066/imcf?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=FALSE&sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
       jdbc-url: jdbc:log4jdbc:mariadb://13.125.122.22:33066/imcf?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=FALSE&sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
-      username: imcf
-      password: imcf123
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
