@@ -51,7 +51,7 @@ logging:
 spring:
   redis:
     host: ${REDIS_IP}
-    port: 18089
+    port: ${REDIS_PORT}
     connect-timeout: 1000000
   main:
     allow-bean-definition-overriding: true
@@ -132,9 +132,7 @@ spring:
       validation-query: SELECT 1
 
     mariadb:
-      #      driver-class-name: org.mariadb.jdbc.Driver
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      #      jdbc-url: jdbc:mysql://13.125.122.22:33066/imcf?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=FALSE&sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
-      jdbc-url: jdbc:log4jdbc:mariadb://13.125.122.22:33066/imcf?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=FALSE&sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
+      jdbc-url: jdbc:log4jdbc:mariadb://${DB_IP}:${DB_PORT}/${DB_NAME}?${DB_OPT}
       username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
