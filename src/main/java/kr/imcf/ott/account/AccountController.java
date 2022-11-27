@@ -55,6 +55,7 @@ public class AccountController {
             MyInfoResponse myInfoResponse = accountService.showIdInfo(accountId.get());
 
             MyInfoResponse message = MyInfoResponse.builder()
+                    .id(myInfoResponse.getId())
                     .name(myInfoResponse.getName())
                     .email(myInfoResponse.getEmail())
                     .platformType(myInfoResponse.getPlatformType())
