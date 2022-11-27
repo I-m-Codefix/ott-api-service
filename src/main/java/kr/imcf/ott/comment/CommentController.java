@@ -22,7 +22,7 @@ public class CommentController {
 
     @GetMapping("/service/ott/commentAccount/{id}")
     public ResponseEntity<?> getAccountCommentList(@PathVariable("id") Long id) {
-        CommentAccountResponse response = commentService.getAccountCommentList(id);
+        CommentMyInfoResponse response = commentService.getAccountCommentList(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

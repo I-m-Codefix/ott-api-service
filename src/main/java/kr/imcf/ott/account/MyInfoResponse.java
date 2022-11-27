@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class MyInfoResponse extends Message {
+    private Long id;
     private String name;
     private String email;
     private String platformType;

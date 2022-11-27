@@ -26,12 +26,12 @@ public class CommentService {
     }
 
     //paging
-    public CommentAccountResponse getAccountCommentList(Long id) {
+    public CommentMyInfoResponse getAccountCommentList(Long id) {
         //== equal
         List<CommentAccountDTO> results = commentRepository.findByWriterId(id).stream().filter(c -> c.getWriter().getId() == id).map(CommentAccountDTO::of).collect(Collectors.toList());
 
-        CommentAccountResponse response =
-                CommentAccountResponse
+        CommentMyInfoResponse response =
+                CommentMyInfoResponse
                         .builder()
                         .code(200)
                         .response("회원님이 작성한 모든 댓글을 조회합니다.")//.get(0).getName 하면 index오류가 있음. 댓글이 없을때.

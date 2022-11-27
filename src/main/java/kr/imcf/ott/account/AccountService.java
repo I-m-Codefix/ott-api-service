@@ -93,6 +93,7 @@ public class AccountService {
         Account account = accountRepository.findByEmail(email);
 
         MyInfoResponse myInfoResponse = new MyInfoResponse();
+        myInfoResponse.setId(account.getId());
         myInfoResponse.setName(account.getName());
         myInfoResponse.setEmail(account.getEmail());
         myInfoResponse.setProfileImage(account.getProfileImage());
@@ -113,6 +114,19 @@ public class AccountService {
             return true;
         }
         return false;
+    }
+
+    public MyInfoResponse showIdInfo(Long id){
+
+        Account account = accountRepository.findById(id).get();
+        MyInfoResponse myInfoResponse = new MyInfoResponse();
+        myInfoResponse.setId(account.getId());
+        myInfoResponse.setName(account.getName());
+        myInfoResponse.setEmail(account.getEmail());
+        myInfoResponse.setProfileImage(account.getProfileImage());
+        myInfoResponse.setPlatformType(account.getPlatformType().toString());
+
+        return myInfoResponse;
     }
 
     public boolean isDuplicate(SignupRequest request) {

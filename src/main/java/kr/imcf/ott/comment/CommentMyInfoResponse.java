@@ -17,7 +17,7 @@ import java.util.ListIterator;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentAccountResponse extends Message {
+public class CommentMyInfoResponse extends Message {
     private List<CommentAccountDTO> result;
 
 }

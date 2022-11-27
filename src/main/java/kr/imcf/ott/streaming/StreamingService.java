@@ -25,4 +25,11 @@ public class StreamingService {
         return result;
     }
 
+    public StreamingDTO getStreamingDesc(Long id) {
+        StreamingDTO results = streamingRepository.findById(id).map(StreamingDTO::of).get();
+        return results;
+    }
+
+
+
 }
