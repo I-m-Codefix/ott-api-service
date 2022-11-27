@@ -24,6 +24,7 @@ public class AccountController {
 
         //builder 패턴, 코드 개선 필요
         MyInfoResponse message = MyInfoResponse.builder()
+                .id(selectedAccount.getId())
                 .name(selectedAccount.getName())
                 .email(selectedAccount.getEmail())
                 .platformType(selectedAccount.getPlatformType())

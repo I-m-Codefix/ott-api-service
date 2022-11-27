@@ -120,7 +120,7 @@ public class AccountService {
 
         Account account = accountRepository.findById(id).get();
         MyInfoResponse myInfoResponse = new MyInfoResponse();
-        myInfoResponse.setId(account.getId());
+        myInfoResponse.setId(id);
         myInfoResponse.setName(account.getName());
         myInfoResponse.setEmail(account.getEmail());
         myInfoResponse.setProfileImage(account.getProfileImage());
