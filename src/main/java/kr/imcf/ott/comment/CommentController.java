@@ -1,5 +1,6 @@
 package kr.imcf.ott.comment;
 
+import kr.imcf.ott.common.Message;
 import kr.imcf.ott.domain.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,10 @@ public class CommentController {
 
     @PostMapping("/service/ott/comment") //valid
     public ResponseEntity<?> addComment(@RequestBody @Nullable Comment comment){
+        if(comment.getWriter() == null)
+            return new ResponseEntity<>(Message.builder().code(200).response("작성자가 없습니다.").build(), HttpStatus.OK);
+        if(comment.getStreaming() == null)
+            return new ResponseEntity<>(Message.builder().code(200).response("작성할 영상이 선택되지 않았거나 없습니다").build(), HttpStatus.OK);
         CommentResponse response = commentService.addComment(comment);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
